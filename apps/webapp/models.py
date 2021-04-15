@@ -1,5 +1,5 @@
 from django.db import models
-# from django.urls import reverse
+from django.urls import reverse
 
 
 class Film(models.Model):
@@ -71,7 +71,7 @@ class FilmPlanet(models.Model):
     planet = models.ForeignKey('Planet', on_delete=models.CASCADE)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'film_planet'
         ordering = ['film', 'planet']
         verbose_name = 'Film Planet'
@@ -137,7 +137,9 @@ class Planet(models.Model):
 
     def __str__(self):
         return self.name
-
+    
+    def get_absolute_url(self):
+        return reverse('planet_detail', kwargs={'pk': self.pk})
 
 class Species(models.Model):
     """ A species i.e. droid. """
