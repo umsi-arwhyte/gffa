@@ -1,5 +1,12 @@
 from django.contrib import admin
-from . models import Person, Planet, Species, Film, Starship, Vehicle, FilmCharacter, FilmPlanet
+from . models import (
+    Film, FilmCharacter, FilmPlanet,
+    Person,
+    Planet,
+    Species,
+    Starship, StarshipPassenger, StarshipPilot,
+    Vehicle, VehiclePassenger, VehiclePilot
+    )
 
 @admin.register(Film)
 class FilmAdmin(admin.ModelAdmin):
@@ -20,16 +27,16 @@ class FilmAdmin(admin.ModelAdmin):
         'director',
         'producer',
         'release_date',
-        'film_characters',
-        'film_planets',
+        # 'characters',
+        # 'planets',
         # 'film_species',
         # 'film_starships',
         # 'film_vehicles'
     ]
     list_filter = ['title']
     filter_horizontal = [
-        'characters',
-        'planets',
+        # 'characters',
+        # 'planets',
         # 'species',
         # 'starships',
         # 'vehicles'
@@ -41,10 +48,10 @@ class FilmAdmin(admin.ModelAdmin):
 class FilmCharacterAdmin(admin.ModelAdmin):
     """FilmCharacter administration."""
 
-    fields = ['film', 'character']
-    list_display = ['film', 'character']
+    fields = ['film', 'person']
+    list_display = ['film', 'person']
     list_filter = ['film']
-    ordering = ['film', 'character']
+    ordering = ['film', 'person']
 
 
 @admin.register(FilmPlanet)
@@ -171,7 +178,7 @@ class StarshipAdmin(admin.ModelAdmin):
         'MGLT',
         'cargo_capacity',
         'consumables',
-        'pilots'
+        # 'pilots'
     ]
     list_display = [
         'starship_class',
@@ -185,11 +192,30 @@ class StarshipAdmin(admin.ModelAdmin):
         'MGLT',
         'cargo_capacity',
         'consumables',
-        'pilots'
+        # 'pilots'
     ]
     list_filter = ['name']
     ordering = ['name']
 
+
+@admin.register(StarshipPassenger)
+class StarshipPassengerAdmin(admin.ModelAdmin):
+    """StarshipPassenger administration."""
+
+    fields = ['starship', 'person']
+    list_display = ['starship', 'person']
+    list_filter = ['starship']
+    ordering = ['starship', 'person']
+
+
+@admin.register(StarshipPilot)
+class StarshipPilotAdmin(admin.ModelAdmin):
+    """StarshipPilot administration."""
+
+    fields = ['starship', 'person']
+    list_display = ['starship', 'person']
+    list_filter = ['starship']
+    ordering = ['starship', 'person']
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
@@ -206,7 +232,7 @@ class VehicleAdmin(admin.ModelAdmin):
         'max_atmosphering_speed',
         'cargo_capacity',
         'consumables',
-        'pilots'
+        # 'pilots'
     ]
     list_display = [
         'name',
@@ -219,7 +245,29 @@ class VehicleAdmin(admin.ModelAdmin):
         'max_atmosphering_speed',
         'cargo_capacity',
         'consumables',
-        'pilots'
+        # 'pilots'
     ]
     list_filter = ['name']
     ordering = ['name']
+
+
+@admin.register(VehiclePassenger)
+class VehiclePassengerAdmin(admin.ModelAdmin):
+    """VehiclePassenger administration."""
+
+    fields = ['vehicle', 'person']
+    list_display = ['vehicle', 'person']
+    list_filter = ['vehicle']
+    ordering = ['vehicle', 'person']
+
+
+@admin.register(VehiclePilot)
+class VehiclePilotAdmin(admin.ModelAdmin):
+    """VehiclePilot administration."""
+
+    fields = ['vehicle', 'person']
+    list_display = ['vehicle', 'person']
+    list_filter = ['vehicle']
+    ordering = ['vehicle', 'person']
+
+

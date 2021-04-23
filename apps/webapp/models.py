@@ -3,7 +3,7 @@ from django.urls import reverse
 
 
 class Film(models.Model):
-    """ A film i.e. The Empire Strikes Back """
+    """ A film i.e., The Empire Strikes Back """
 
     film_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
@@ -18,11 +18,11 @@ class Film(models.Model):
     # vehicles = models.ManyToManyField('Vehicle', related_name="film_vehicles", blank=True)
     # species = models.ManyToManyField('Species', related_name="film_species", blank=True)
 
-    def film_characters(self):
-        return "\n".join([character.name for character in self.characters.all()])
+    # def film_characters(self):
+    #     return "\n".join([character.name for character in self.characters.all()])
 
-    def film_planets(self):
-        return "\n".join([planet.name for planet in self.planets.all()])
+    # def film_planets(self):
+    #     return "\n".join([planet.name for planet in self.planets])
 
     # def get_starships(self):
     #     return "\n".join([starship.url for starship in self.starships.all()])
@@ -37,7 +37,7 @@ class Film(models.Model):
         return reverse('film_detail', kwargs={'pk': self.pk})
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'film'
         ordering = ['title']
         verbose_name = 'Film'
@@ -53,38 +53,33 @@ class Film(models.Model):
         return self.title
 
 
-# class FilmJurisdiction(models.Model):
-#     """
-# 	PK added to satisfy Django requirement. The Film entry will be deleted if
-#     corresponding parent record in the film table is deleted.
-#     This mirrors CONSTRAINT behavior in the MySQL back-end.
-# 	"""
-#     film_jurisdiction_id = models.AutoField(primary_key=True)
-#     film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
-
-#     class Meta:
-#         managed = True
-#         db_table = 'film_jurisdiction'
-#         ordering = ['film']
-#         verbose_name = 'Film Jurisdiction'
-#         verbose_name_plural = 'Film Jurisdictions'
-
-
 class FilmCharacter(models.Model):
+    """
+	PK added to satisfy Django requirement. Row(s) will be deleted
+    if the corresponding parent record(s) is/are deleted.
+    This mirrors CONSTRAINT behavior in the DB back-end.
+	"""
+
     film_person_id = models.AutoField(primary_key=True)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
-    character = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = True
         db_table = 'film_character'
-        ordering = ['film', 'character']
+        ordering = ['film', 'person']
         verbose_name = 'Film Character'
         verbose_name_plural = 'Film Characters'
-        unique_together = (('film', 'character'),)
+        unique_together = (('film', 'person'),)
 
 
 class FilmPlanet(models.Model):
+    """
+	PK added to satisfy Django requirement. Row(s) will be deleted
+    if the corresponding parent record(s) is/are deleted.
+    This mirrors CONSTRAINT behavior in the DB back-end.
+	"""
+
     film_planet_id = models.AutoField(primary_key=True)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
     planet = models.ForeignKey('Planet', on_delete=models.CASCADE, blank=True, null=True)
@@ -114,7 +109,7 @@ class Person(models.Model):
     home_world = models.ForeignKey('Planet', related_name="person_home_world", on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'person'
         ordering = ['name']
         verbose_name = 'Person'
@@ -131,7 +126,7 @@ class Person(models.Model):
 
 
 class Planet(models.Model):
-    """ A planet i.e. Tatooine """
+    """ A planet i.e., Tatooine """
 
     planet_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -145,7 +140,7 @@ class Planet(models.Model):
     population = models.CharField(max_length=40, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'planet'
         ordering = ['name']
         verbose_name = 'Planet'
@@ -159,7 +154,7 @@ class Planet(models.Model):
 
 
 class Species(models.Model):
-    """ A species i.e. droid. """
+    """ A species i.e., Wookiee. """
 
     species_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=40)
@@ -174,7 +169,7 @@ class Species(models.Model):
     home_world = models.ForeignKey('Planet', related_name="species_home_world", on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'species'
         ordering = ['name']
         verbose_name = 'Species'
@@ -206,10 +201,11 @@ class Starship(models.Model):
     MGLT = models.CharField(max_length=40, blank=True, null=True)
     cargo_capacity = models.CharField(max_length=40, blank=True, null=True)
     consumables = models.CharField(max_length=40, blank=True, null=True)
-    pilots = models.ForeignKey('Person', related_name='starship_person', on_delete=models.PROTECT, blank=True, null=True)
+    pilots = models.ManyToManyField('Person', through='StarshipPilot', related_name='starship_pilot', blank=True)
+
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'starship'
         ordering = ['name']
         verbose_name = 'Starship'
@@ -220,6 +216,45 @@ class Starship(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class StarshipPassenger(models.Model):
+    """
+	PK added to satisfy Django requirement. Row(s) will be deleted
+    if the corresponding parent record(s) is/are deleted.
+    This mirrors CONSTRAINT behavior in the DB back-end.
+	"""
+    starship_passenger_id = models.AutoField(primary_key=True)
+    starship = models.ForeignKey('Starship', on_delete=models.CASCADE, blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'starship_passenger'
+        ordering = ['starship', 'person']
+        verbose_name = 'Starship Passenger'
+        verbose_name_plural = 'Starship Passengers'
+        unique_together = (('starship', 'person'),)
+
+
+
+class StarshipPilot(models.Model):
+    """
+	PK added to satisfy Django requirement. Row(s) will be deleted
+    if the corresponding parent record(s) is/are deleted.
+    This mirrors CONSTRAINT behavior in the DB back-end.
+	"""
+    starship_pilot_id = models.AutoField(primary_key=True)
+    starship = models.ForeignKey('Starship', on_delete=models.CASCADE, blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'starship_pilot'
+        ordering = ['starship', 'person']
+        verbose_name = 'Starship Pilot'
+        verbose_name_plural = 'Starship Pilots'
+        unique_together = (('starship', 'person'),)
 
 
 class Vehicle(models.Model):
@@ -236,10 +271,10 @@ class Vehicle(models.Model):
     max_atmosphering_speed = models.CharField(max_length=40, blank=True, null=True)
     cargo_capacity = models.CharField(max_length=40, blank=True, null=True)
     consumables = models.CharField(max_length=40, blank=True, null=True)
-    pilots = models.ForeignKey('Person', related_name='vehicle_person', on_delete=models.PROTECT, blank=True, null=True)
+    pilots = models.ManyToManyField('Person', through='VehiclePilot', related_name='vehicle_pilot', blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'vehicle'
         ordering = ['name']
         verbose_name = 'Vehicle'
@@ -254,18 +289,38 @@ class Vehicle(models.Model):
 
 class VehiclePassenger(models.Model):
     """
-	PK added to satisfy Django requirement. The Vehicle entry will be deleted if
-    corresponding parent record in the vehicle table is deleted.
+    PK added to satisfy Django requirement. Row(s) will be deleted
+    if the corresponding parent record(s) is/are deleted.
     This mirrors CONSTRAINT behavior in the DB back-end.
-	"""
+    """
+
     vehicle_passenger_id = models.AutoField(primary_key=True)
     vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, blank=True, null=True)
-    passenger = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'vehicle_passenger'
-        ordering = ['vehicle', 'passenger']
+        ordering = ['vehicle', 'person']
         verbose_name = 'Vehicle Passenger'
         verbose_name_plural = 'Vehicle Passenger'
-        unique_together = (('vehicle', 'passenger'),)
+        unique_together = (('vehicle', 'person'),)
+
+
+class VehiclePilot(models.Model):
+    """
+	PK added to satisfy Django requirement. Row(s) will be deleted
+    if the corresponding parent record(s) is/are deleted.
+    This mirrors CONSTRAINT behavior in the DB back-end.
+	"""
+    vehicle_pilot_id = models.AutoField(primary_key=True)
+    vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, blank=True, null=True)
+    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'vehicle_pilot'
+        ordering = ['vehicle', 'person']
+        verbose_name = 'Vehicle Pilot'
+        verbose_name_plural = 'Vehicle Pilots'
+        unique_together = (('vehicle', 'person'),)
