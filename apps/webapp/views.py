@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from . forms import FilmForm, VehicleForm
-from . models import Film, FilmCharacter, FilmPlanet, Person, Planet, Species, Starship, Vehicle, VehiclePassenger
+from . forms import FilmForm, StarshipForm, VehicleForm
+from . models import Film, FilmCharacter, FilmPlanet, FilmStarship, Person, Planet, Species, Starship, Vehicle, VehiclePassenger
 
 
 
@@ -321,6 +321,101 @@ class StarshipListView(generic.ListView):
 	def get_queryset(self):
 		return Starship.objects.all()
 		# return Starship.objects.select_related('?').order_by('?')
+
+@method_decorator(login_required, name='dispatch')
+class StarshipCreateView(generic.View):
+	model = Starship
+	form_class = StarshipForm
+	success_message = "Starship created successfully"
+	template_name = 'webapp/starship_new.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def post(self, request):
+		form = StarshipForm(request.POST)
+		if form.is_valid():
+			starship = form.save(commit=False)
+			starship.save()
+
+			for film in form.cleaned_data['films']:
+				FilmStarship.objects.create(film=film, starship=starship)
+
+			return redirect(starship) # shortcut to object's get_absolute_url()
+		return render(request, 'webapp/starship_new.html', {'form': form})
+
+	def get(self, request):
+		form = StarshipForm()
+		return render(request, 'webapp/starship_new.html', {'form': form})
+
+@method_decorator(login_required, name='dispatch')
+class StarshipDeleteView(generic.DeleteView):
+	model = Starship
+	success_message = "Starship deleted successfully"
+	success_url = reverse_lazy('starships')
+	context_object_name = 'starship'
+	template_name = 'webapp/starship_delete.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		self.object = self.get_object()
+
+		# Delete FilmStarship entries
+		FilmStarship.objects \
+			.filter(starship_id=self.object.starship_id) \
+			.delete()
+
+		self.object.delete()
+
+		return HttpResponseRedirect(self.get_success_url())
+
+@method_decorator(login_required, name='dispatch')
+class StarshipUpdateView(generic.UpdateView):
+	model = Starship
+	form_class = StarshipForm
+	context_object_name = 'starship'
+	success_message = "Starship updated successfully"
+	template_name = 'webapp/starship_update.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def form_valid(self, form):
+		starship = form.save(commit=False)
+		starship.save()
+
+	# If any existing films are not in updated list, delete them
+		new_film_ids = []
+		old_film_ids = FilmStarship.objects\
+			.values_list('film_id', flat=True)\
+			.filter(starship_id=starship.starship_id)
+
+		# New films list
+		new_films = form.cleaned_data['films']
+
+		# Insert new unmatched country entries
+		for film in new_films:
+			new_film_id = film.film_id
+			new_film_ids.append(new_film_id)
+			if new_film_id in old_film_ids:
+				continue
+			else:
+				FilmStarship.objects \
+					.create(starship=starship, film=film)
+
+		# Delete old unmatched country entries
+		for old_film_id in old_film_ids:
+			if old_film_id in new_film_ids:
+				continue
+			else:
+				FilmStarship.objects \
+					.filter(film_id=old_film_id, starship_id=starship.starship_id) \
+					.delete()
+
+		return HttpResponseRedirect(starship.get_absolute_url())
+		# return redirect('starship_detail', pk=starship.pk)
 
 @method_decorator(login_required, name='dispatch')
 class VehicleCreateView(generic.View):

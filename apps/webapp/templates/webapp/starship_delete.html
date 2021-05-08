@@ -1,0 +1,12 @@
+{% extends 'webapp/base.html' %}
+
+{% block mainbody %}
+
+    <form method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete the Starship "{{ starship.name }}"?</p>
+        <button type="submit" class="btn btn-outline-danger">delete</button>
+        <a class="btn btn-outline-secondary" href="{% url 'starship_detail' starship.pk %}">cancel</a>
+    </form>
+
+{% endblock mainbody %}

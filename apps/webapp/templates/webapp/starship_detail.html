@@ -8,10 +8,10 @@
             </div>
             {% if user.is_authenticated %}
                 <div class="col-xs-1">
-                    <a class="btn btn-outline-secondary">edit</a>
+                    <a class="btn btn-outline-secondary" href="{% url 'starship_update' starships.pk %}">edit</a>
                 </div>
                 <div class="col-xs-1">
-                    &nbsp;<a class="btn btn-outline-warning">delete</a>
+                    &nbsp;<a class="btn btn-outline-warning" href="{% url 'starship_delete' starships.pk %}">delete</a>
                 </div>
             {% endif %}
             <div class="col-xs-1">
@@ -160,6 +160,19 @@
             </div>
             <div class="col-sm-10">
                 <p>{{ starships.pilots }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if starships.films %}
+        <div class="row">
+            <div class="col-sm-2">
+                <p>Films</p>
+            </div>
+            <div class="col-sm-10">
+                {% for film in starships.films.all %}
+                    <li>{{ film.title }}</li>
+                {% endfor %}
             </div>
         </div>
     {% endif %}

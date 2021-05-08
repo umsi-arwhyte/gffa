@@ -76,7 +76,7 @@ class FilmCharacter(models.Model):
     character = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film_character'
         ordering = ['film', 'character']
         verbose_name = 'Film Character'
@@ -90,12 +90,31 @@ class FilmPlanet(models.Model):
     planet = models.ForeignKey('Planet', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film_planet'
         ordering = ['film', 'planet']
         verbose_name = 'Film Planet'
         verbose_name_plural = 'Film Planets'
         unique_together = (('film', 'planet'),)
+
+class FilmStarship(models.Model):
+    """
+	PK added to satisfy Django requirement.  The starship entry will be
+    deleted if corresponding parent record in the starship table is deleted.
+    This mirrors CONSTRAINT behavior in the MySQL back-end.
+	"""
+
+    film_starship_id = models.AutoField(primary_key=True)
+    film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
+    starship = models.ForeignKey('Starship', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'film_starship'
+        ordering = ['film', 'starship']
+        verbose_name = 'Film Starship'
+        verbose_name_plural = 'Film Starships'
+        unique_together = (('film', 'starship'),)
 
 
 class Person(models.Model):
@@ -207,6 +226,19 @@ class Starship(models.Model):
     cargo_capacity = models.CharField(max_length=40, blank=True, null=True)
     consumables = models.CharField(max_length=40, blank=True, null=True)
     pilots = models.ForeignKey('Person', related_name='starship_person', on_delete=models.PROTECT, blank=True, null=True)
+
+    # Intermediate model (starship -> film_starship <- film)
+    films = models.ManyToManyField(
+        Film,
+        through='FilmStarship',
+        related_name='films'
+    )
+
+    def film_starships(self):
+        return "\n".join([film.title for film in self.film.all()])
+
+    def get_absolute_url(self):
+        return reverse('starship_detail', kwargs={'pk': self.pk})
 
     class Meta:
         managed = False
