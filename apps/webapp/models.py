@@ -192,8 +192,21 @@ class Species(models.Model):
     language = models.CharField(max_length=40, blank=True, null=True)
     home_world = models.ForeignKey('Planet', related_name="species_home_world", on_delete=models.PROTECT, blank=True, null=True)
 
+    # Intermediate model (species -> species_character <- character)
+    characters = models.ManyToManyField(
+        Person,
+        through='SpeciesCharacter',
+        related_name='character'
+    )
+
+    def species_characters(self):
+        return "\n".join([character.name for character in self.character.all()])
+
+    def get_absolute_url(self):
+        return reverse('species_detail', kwargs={'pk': self.pk})
+
     class Meta:
-        managed = False
+        managed = True
         db_table = 'species'
         ordering = ['name']
         verbose_name = 'Species'
@@ -207,6 +220,25 @@ class Species(models.Model):
 
     def __str__(self):
         return self.name
+
+class SpeciesCharacter(models.Model):
+    """
+	PK added to satisfy Django requirement.  The species entry will be
+    deleted if corresponding parent record in the species table is deleted.
+    This mirrors CONSTRAINT behavior in the MySQL back-end.
+	"""
+
+    species_character_id = models.AutoField(primary_key=True)
+    species = models.ForeignKey('Species', on_delete=models.CASCADE, blank=True, null=True)
+    character = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = True
+        db_table = 'species_character'
+        ordering = ['species', 'character']
+        verbose_name = 'Species Character'
+        verbose_name_plural = 'Species Characters'
+        unique_together = (('species', 'character'),)
 
 
 class Starship(models.Model):
@@ -271,7 +303,7 @@ class Vehicle(models.Model):
     pilots = models.ForeignKey('Person', related_name='vehicle_person', on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'vehicle'
         ordering = ['name']
         verbose_name = 'Vehicle'
@@ -295,7 +327,7 @@ class VehiclePassenger(models.Model):
     passenger = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'vehicle_passenger'
         ordering = ['vehicle', 'passenger']
         verbose_name = 'Vehicle Passenger'
