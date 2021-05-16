@@ -206,7 +206,7 @@ class Species(models.Model):
         return reverse('species_detail', kwargs={'pk': self.pk})
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'species'
         ordering = ['name']
         verbose_name = 'Species'
@@ -233,7 +233,7 @@ class SpeciesCharacter(models.Model):
     character = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'species_character'
         ordering = ['species', 'character']
         verbose_name = 'Species Character'
@@ -303,7 +303,7 @@ class Vehicle(models.Model):
     pilots = models.ForeignKey('Person', related_name='vehicle_person', on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'vehicle'
         ordering = ['name']
         verbose_name = 'Vehicle'
@@ -327,7 +327,7 @@ class VehiclePassenger(models.Model):
     passenger = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'vehicle_passenger'
         ordering = ['vehicle', 'passenger']
         verbose_name = 'Vehicle Passenger'
