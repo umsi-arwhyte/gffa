@@ -76,7 +76,7 @@ class FilmCharacter(models.Model):
     character = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film_character'
         ordering = ['film', 'character']
         verbose_name = 'Film Character'
@@ -90,12 +90,31 @@ class FilmPlanet(models.Model):
     planet = models.ForeignKey('Planet', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film_planet'
         ordering = ['film', 'planet']
         verbose_name = 'Film Planet'
         verbose_name_plural = 'Film Planets'
         unique_together = (('film', 'planet'),)
+
+class FilmStarship(models.Model):
+    """
+	PK added to satisfy Django requirement.  The starship entry will be
+    deleted if corresponding parent record in the starship table is deleted.
+    This mirrors CONSTRAINT behavior in the MySQL back-end.
+	"""
+
+    film_starship_id = models.AutoField(primary_key=True)
+    film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
+    starship = models.ForeignKey('Starship', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'film_starship'
+        ordering = ['film', 'starship']
+        verbose_name = 'Film Starship'
+        verbose_name_plural = 'Film Starships'
+        unique_together = (('film', 'starship'),)
 
 
 class Person(models.Model):
@@ -173,6 +192,19 @@ class Species(models.Model):
     language = models.CharField(max_length=40, blank=True, null=True)
     home_world = models.ForeignKey('Planet', related_name="species_home_world", on_delete=models.PROTECT, blank=True, null=True)
 
+    # Intermediate model (species -> species_character <- character)
+    characters = models.ManyToManyField(
+        Person,
+        through='SpeciesCharacter',
+        related_name='character'
+    )
+
+    def species_characters(self):
+        return "\n".join([character.name for character in self.character.all()])
+
+    def get_absolute_url(self):
+        return reverse('species_detail', kwargs={'pk': self.pk})
+
     class Meta:
         managed = False
         db_table = 'species'
@@ -188,6 +220,25 @@ class Species(models.Model):
 
     def __str__(self):
         return self.name
+
+class SpeciesCharacter(models.Model):
+    """
+	PK added to satisfy Django requirement.  The species entry will be
+    deleted if corresponding parent record in the species table is deleted.
+    This mirrors CONSTRAINT behavior in the MySQL back-end.
+	"""
+
+    species_character_id = models.AutoField(primary_key=True)
+    species = models.ForeignKey('Species', on_delete=models.CASCADE, blank=True, null=True)
+    character = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'species_character'
+        ordering = ['species', 'character']
+        verbose_name = 'Species Character'
+        verbose_name_plural = 'Species Characters'
+        unique_together = (('species', 'character'),)
 
 
 class Starship(models.Model):
@@ -207,6 +258,19 @@ class Starship(models.Model):
     cargo_capacity = models.CharField(max_length=40, blank=True, null=True)
     consumables = models.CharField(max_length=40, blank=True, null=True)
     pilots = models.ForeignKey('Person', related_name='starship_person', on_delete=models.PROTECT, blank=True, null=True)
+
+    # Intermediate model (starship -> film_starship <- film)
+    films = models.ManyToManyField(
+        Film,
+        through='FilmStarship',
+        related_name='films'
+    )
+
+    def film_starships(self):
+        return "\n".join([film.title for film in self.film.all()])
+
+    def get_absolute_url(self):
+        return reverse('starship_detail', kwargs={'pk': self.pk})
 
     class Meta:
         managed = False
