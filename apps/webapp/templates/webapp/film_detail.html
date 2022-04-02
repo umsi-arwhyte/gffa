@@ -1,0 +1,119 @@
+{% extends 'webapp/base.html' %}
+{% block mainbody %}
+
+    <header>
+        <div class="row">
+            <div class="col-sm-9">
+                <h2>{{ film.title | safe }}</h2>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="col-xs-1">
+                    <a class="btn btn-outline-secondary" href="{% url 'film_update' film.pk %}">edit</a>
+                </div>
+                <div class="col-xs-1">
+                    &nbsp;<a class="btn btn-outline-warning" href="{% url 'film_delete' film.pk %}">delete</a>
+                </div>
+            {% endif %}
+            <div class="col-xs-1">
+                &nbsp;<a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">back</a>
+            </div>
+        </div>
+    </header>
+
+    <br>
+    <article>
+        {% if film.title %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Title</p>
+                </div>
+                <div class="col-sm-10">
+                    <p>{{ film.title }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.episode_id %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Episode ID</p>
+                </div>
+                <div class="col-sm-10">
+                    <p>{{ film.episode_id }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.opening_crawl %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Opening Crawl</p>
+                </div>
+                <div class="col-sm-10">
+                    <p>{{ film.opening_crawl }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.director %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Director</p>
+                </div>
+                <div class="col-sm-10">
+                    <p>{{ film.director }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.producer %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Producer</p>
+                </div>
+                <div class="col-sm-10">
+                    <p>{{ film.producer }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.release_date %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Release Date</p>
+                </div>
+                <div class="col-sm-10">
+                    <p>{{ film.release_date }}</p>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.characters %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Characters</p>
+                </div>
+                <div class="col-sm-10">
+                    {% for character in film.characters.all %}
+                        <li>{{ character.name }}</li>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if film.planets %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Planets</p>
+                </div>
+                <div class="col-sm-10">
+                    {% for planet in film.planets.all %}
+                        <li>{{ planet.name }}</li>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </article>
+    <br>
+
+{% endblock mainbody %}

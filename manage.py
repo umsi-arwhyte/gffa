@@ -5,7 +5,10 @@ import sys
 
 
 def main():
+<<<<<<< HEAD
     """Run administrative tasks."""
+=======
+>>>>>>> 9f3b8368c63a623cee5f5551eaa906c500ed1e5f
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'gffa.settings')
     try:
         from django.core.management import execute_from_command_line

@@ -1,0 +1,35 @@
+{% extends 'webapp/base.html' %}
+{% block mainbody %}
+
+    <article>
+
+        <header>
+            <div class="row">
+                <div class="col-sm-9">
+                    <h2>Vehicles</h2>
+                </div>
+                <div class="col-sm-1">
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-outline-secondary" href="{% url 'vehicle_new' %}">new</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        {% if vehicles %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul>
+                        {% for vehicle in vehicles %}
+                            <li><a href="{% url 'vehicle_detail' vehicle.pk %}">{{ vehicle.name }}</a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <p>No Vehicles are available to view.</p>
+        {% endif %}
+
+    </article>
+
+{% endblock mainbody %}

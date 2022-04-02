@@ -1,0 +1,25 @@
+{% extends 'webapp/base.html' %}
+{% block mainbody %}
+
+    <article>
+        <header>
+            <h2>Planets</h2>
+        </header>
+
+        {% if planets %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul>
+                        {% for planet in planets %}
+                            <li><a href="{% url 'planet_detail' planet.pk %}">{{ planet.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <p>No Planets are available to view.</p>
+        {% endif %}
+    </article>
+
+{% endblock mainbody %}
