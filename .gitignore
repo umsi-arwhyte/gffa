@@ -3,12 +3,9 @@
 # https://github.com/django/django/blob/master/.gitignore
 # https://www.gitignore.io/api/django,python,intellij (bloated)
 
-### Apple ###
-**/.DS_Store
-
 ### VS Code ###
 *.code-workspace
-.vscode
+.vscode/
 
 ### Django ###
 *.log
@@ -18,7 +15,6 @@ __pycache__/
 local_settings.py
 db.sqlite3
 media
-static
 
 ### Django secrets ###
 **/secrets.py
@@ -30,6 +26,15 @@ static
 *.iws
 *.uml
 out/
+
+### macOS files ###
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -98,3 +103,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Zip files
+*.zip
