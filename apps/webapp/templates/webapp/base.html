@@ -14,7 +14,7 @@
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
           crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/gffa.css' %}">
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="shortcut icon" href="{% static 'img/GFFA_maize_blue.png' %}">
 
     <title>{% block title %}GFFA - The Star Wars API{% endblock title %}</title>
 </head>
@@ -37,7 +37,8 @@
     </div>
     -->
 
-    <a class="navbar-brand" href="/">LOGO</a> <!--TODO: add logo -->
+    <a class="navbar-brand" href="/" style="padding: 0px 0px;">
+    <img src="{% static 'img/GFFA_maize_blue.png' %}" alt="GFFA" style="width:60px;height:60px"></a> <!--TODO: add logo -->
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
@@ -48,9 +49,9 @@
         <ul class="navbar-nav mr-auto">
             <a class="nav-link" href="{% url 'about' %}">About</a>
             <div class="dropdown">
-                <a class="dropbtn">Documentation
+                <button class="dropbtn">API
                     <i class="fa fa-caret-down"></i>
-                </a>
+                </button>
                 <div class="dropdown-content">
                     <a class="nav-link" href="{% url 'docs' %}">Documentation</a>
                     <a class="nav-link" href="{% url 'root' %}">Root</a>
@@ -75,6 +76,7 @@
                     <a class="nav-link" href="{% url 'vehicles' %}">Vehicles</a>
                 </div>
             </div>
+            <a class="nav-link" href="{% url 'contributers' %}">Contributers</a>
         </ul>
     </div>
 
@@ -91,7 +93,7 @@
 
         <!-- Removed jumbotron row -->
 
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid" style="background-image: url(https://www.ctvnews.ca/polopoly_fs/1.4892355.1586635325!/httpImage/image.jpg_gen/derivatives/landscape_1020/image.jpg); background-size: cover;">
             <div class="container-fluid">
                 <div class="center yellow">
                     <h1 class="display-4">A Galaxy Far, Far Away</h1>
