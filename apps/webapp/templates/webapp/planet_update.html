@@ -1,0 +1,77 @@
+{% extends 'webapp/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block mainbody %}
+
+	<header>
+		<div class="row">
+			<div class="col-sm-11">
+				<h2>New Planet</h2>
+			</div>
+			<div class="col-xs-1">
+				<a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">back</a>
+			</div>
+		</div>
+	</header>
+
+	<p>&nbsp;</p>
+	<!-- novalidate attribute required to render validation messages -->
+	<form method="post" novalidate>
+	{% csrf_token %}
+
+		<div class="row">
+			<div class="col-6">
+				{{ form.name | as_crispy_field }}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-3">
+				{{ form.diameter | as_crispy_field }}
+			</div>
+			<div class="col-3">
+				{{ form.climate | as_crispy_field }}
+			</div>
+		</div>
+
+        <div class="row">
+            <div class="col-6">
+                {{ form.gravity | as_crispy_field}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                {{ form.terrain | as_crispy_field}}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+				{{ form.surface_water | as_crispy_field }}
+			</div>
+			<div class="col-6">
+				{{ form.population | as_crispy_field }}
+			</div>
+        </div>
+
+        <div class="row">
+			<div class="col-3">
+				{{ form.rotation_period | as_crispy_field }}
+			</div>
+		</div>
+
+        <div class="row">
+			<div class="col-3">
+				{{ form.orbital_period | as_crispy_field }}
+			</div>
+		</div>
+
+	<button type="submit" class="btn btn-outline-success">Add</button>
+    &nbsp;<a class="btn btn-outline-secondary" href="{% url 'planet_detail' planets.pk %}">cancel</a>
+	</form>
+
+<p>&nbsp;</p>
+
+{% endblock mainbody %}

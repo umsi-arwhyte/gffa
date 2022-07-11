@@ -151,7 +151,9 @@ class Planet(models.Model):
 
     def __str__(self):
         return self.name
-
+    
+    def get_absolute_url(self):
+        return reverse('planet_detail', kwargs={'pk': self.pk})
 
 class Species(models.Model):
     """ A species i.e., Wookiee. """

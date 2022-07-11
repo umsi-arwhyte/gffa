@@ -4,8 +4,6 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from . forms import FilmForm, VehicleForm
-from . models import Film, FilmCharacter, FilmPlanet, Person, Planet, Species, Starship, Vehicle, VehiclePassenger
 
 
 
@@ -255,6 +253,8 @@ class PersonListView(generic.ListView):
 		# return Person.objects.select_related('homeworld').order_by('name')
 
 
+
+
 class PlanetDetailView(generic.DetailView):
 	model = Planet
 	context_object_name = 'planets'
@@ -277,6 +277,72 @@ class PlanetListView(generic.ListView):
 		return Planet.objects.all()
 		# return Person.objects.select_related('homeworld').order_by('name')
 
+
+@method_decorator(login_required, name='dispatch')
+class PlanetCreateView(generic.View):
+	model = Planet
+	form_class = PlanetForm
+	success_message = "Planet created successfully!"
+	template_name = 'webapp/planet_new.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def post(self, request):
+		form = PlanetForm(request.POST)
+		if form.is_valid():
+			planet = form.save(commit=False)
+			planet.save()
+
+		for planet in form.cleaned_data['planets']:
+			Planet.objects.create(planet=planet)
+
+		return render(request, 'webapp/planet_new.html', {'form': form})
+
+	def get(self, request):
+		form = PlanetForm()
+		return render(request, 'webapp/planet_new.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class PlanetUpdateView(generic.UpdateView):
+	model = Planet
+	form_class = PlanetForm
+	context_object_name = 'planet'
+	success_message = "Planet updated successfully!"
+	template_name = 'webapp/planet_update.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def form_valid(self, form):
+		planet = form.save(commit=False)
+		planet.save()
+
+		return HttpResponseRedirect(planet.get_absolute_url())
+
+@method_decorator(login_required, name='dispatch')
+class PlanetDeleteView(generic.DeleteView):
+	model = Planet
+	success_message = "Planet deleted successfully!"
+	success_url = reverse_lazy('planet')
+	context_object_name = 'planet'
+	template_name = 'webapp/planet_delete.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		self.object = self.get_object()
+
+		# Delete Planet entries
+		Planet.objects \
+			.filter(planet_id=self.object.planet_id) \
+			.delete()
+
+		self.object.delete()
+
+		return HttpResponseRedirect(self.get_success_url())
 
 class SpeciesDetailView(generic.DetailView):
 	model = Species
