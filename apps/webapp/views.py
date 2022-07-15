@@ -4,6 +4,8 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from .forms import FilmForm, PlanetForm, VehicleForm
+from . models import Film, FilmCharacter, FilmPlanet, Person, Planet, Species, Starship, Vehicle
 
 
 
