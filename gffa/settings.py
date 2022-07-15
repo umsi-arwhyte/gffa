@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'apps.webapp',
-    'apps.api.apps'
+    'apps.api'
 ]
 
 MIDDLEWARE = [
