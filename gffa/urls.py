@@ -27,6 +27,5 @@ urlpatterns = [
      path('accounts/', include('allauth.urls')),
      path('apps/webapp/', include('apps.webapp.urls')),
      path('api/', include('apps.api.urls')),
-     path('api-auth/', include('rest_framework.urls')),
      path('login/', LoginView.as_view(), name='login')
     ]

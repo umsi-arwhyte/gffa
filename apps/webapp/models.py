@@ -37,7 +37,7 @@ class Film(models.Model):
         return reverse('film_detail', kwargs={'pk': self.pk})
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film'
         ordering = ['title']
         verbose_name = 'Film'
@@ -65,7 +65,7 @@ class FilmCharacter(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film_character'
         ordering = ['film', 'person']
         verbose_name = 'Film Character'
@@ -85,7 +85,7 @@ class FilmPlanet(models.Model):
     planet = models.ForeignKey('Planet', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'film_planet'
         ordering = ['film', 'planet']
         verbose_name = 'Film Planet'
@@ -109,7 +109,7 @@ class Person(models.Model):
     home_world = models.ForeignKey('Planet', related_name="person_home_world", on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'person'
         ordering = ['name']
         verbose_name = 'Person'
@@ -140,7 +140,7 @@ class Planet(models.Model):
     population = models.CharField(max_length=40, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'planet'
         ordering = ['name']
         verbose_name = 'Planet'
@@ -171,7 +171,7 @@ class Species(models.Model):
     home_world = models.ForeignKey('Planet', related_name="species_home_world", on_delete=models.PROTECT, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'species'
         ordering = ['name']
         verbose_name = 'Species'
@@ -207,7 +207,7 @@ class Starship(models.Model):
 
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'starship'
         ordering = ['name']
         verbose_name = 'Starship'
@@ -231,7 +231,7 @@ class StarshipPassenger(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'starship_passenger'
         ordering = ['starship', 'person']
         verbose_name = 'Starship Passenger'
@@ -251,7 +251,7 @@ class StarshipPilot(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'starship_pilot'
         ordering = ['starship', 'person']
         verbose_name = 'Starship Pilot'
@@ -276,7 +276,7 @@ class Vehicle(models.Model):
     pilots = models.ManyToManyField('Person', through='VehiclePilot', related_name='vehicle_pilot', blank=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'vehicle'
         ordering = ['name']
         verbose_name = 'Vehicle'
@@ -301,7 +301,7 @@ class VehiclePassenger(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'vehicle_passenger'
         ordering = ['vehicle', 'person']
         verbose_name = 'Vehicle Passenger'
@@ -320,7 +320,7 @@ class VehiclePilot(models.Model):
     person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'vehicle_pilot'
         ordering = ['vehicle', 'person']
         verbose_name = 'Vehicle Pilot'
