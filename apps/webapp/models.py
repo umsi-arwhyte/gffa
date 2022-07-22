@@ -3,17 +3,30 @@ from django.urls import reverse
 
 
 class Film(models.Model):
-    """ A film i.e., The Empire Strikes Back """
+    """Representation of a film (e.g., The Empire Strikes Back)."""
 
     film_id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    episode_id = models.IntegerField(blank=True, null=True)
-    opening_crawl = models.TextField(max_length=1000, blank=True, null=True)
-    director = models.CharField(max_length=100, blank=True, null=True)
-    producer = models.CharField(max_length=100, blank=True, null=True)
-    release_date = models.DateField(blank=True, null=True)
-    characters = models.ManyToManyField('Person', through='FilmCharacter', related_name='film_person', blank=True)
-    planets = models.ManyToManyField('Planet', through='FilmPlanet', related_name='film_planet', blank=True)
+    title = models.CharField(max_length=100, null=False)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+    class Meta:
+        managed = False
+        db_table = 'film'
+        ordering = ['title']
+        verbose_name = 'Film'
+        verbose_name_plural = 'Films'
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('film_detail', kwargs={'pk': self.pk})
+
+    # characters = models.ManyToManyField('Person', through='FilmCharacter', related_name='film_person', blank=True)
+    # planets = models.ManyToManyField('Planet', through='FilmPlanet', related_name='film_planet', blank=True)
     # starships = models.ManyToManyField('Starship', related_name="film_starships", blank=True)
     # vehicles = models.ManyToManyField('Vehicle', related_name="film_vehicles", blank=True)
     # species = models.ManyToManyField('Species', related_name="film_species", blank=True)
@@ -33,34 +46,13 @@ class Film(models.Model):
     # def get_species(self):
     #     return "\n".join([species.url for species in self.species.all()])
 
-    def get_absolute_url(self):
-        return reverse('film_detail', kwargs={'pk': self.pk})
-
-    class Meta:
-        managed = False
-        db_table = 'film'
-        ordering = ['title']
-        verbose_name = 'Film'
-        verbose_name_plural = 'Films'
-
-    # def get_absolute_url(self):
-    #     return reverse('person_detail', args=[self.url])
-
-    # def __unicode__(self):
-    #     return self.name
-
-    def __str__(self):
-        return self.title
-
 
 class FilmCharacter(models.Model):
-    """
-	PK added to satisfy Django requirement. Row(s) will be deleted
-    if the corresponding parent record(s) is/are deleted.
-    This mirrors CONSTRAINT behavior in the DB back-end.
+    """PK added to satisfy Django requirement. Row(s) will be deleted if the corresponding parent
+    record(s) is/are deleted. This mirrors CONSTRAINT behavior in the DB back-end.
 	"""
 
-    film_person_id = models.AutoField(primary_key=True)
+    film_character_id = models.AutoField(primary_key=True)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
     person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
@@ -93,51 +85,59 @@ class FilmPlanet(models.Model):
         unique_together = (('film', 'planet'),)
 
 
-class Person(models.Model):
-    """ A person i.e., Luke Skywalker. """
+class FilmVehicle(models.Model):
+    """PK added to satisfy Django requirement. Row(s) will be deleted if the corresponding parent
+    record(s) is/are deleted. This mirrors CONSTRAINT behavior in the DB back-end.
+	"""
 
-    person_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    birth_year = models.CharField(max_length=10, blank=True, null=True)
-    species = models.ForeignKey('Species', related_name="person_species", on_delete=models.PROTECT, blank=True, null=True)
-    gender = models.CharField(max_length=10, blank=True, null=True)
-    height = models.CharField(max_length=10, blank=True, null=True)
-    mass = models.CharField(max_length=10, blank=True, null=True)
-    eye_color = models.CharField(max_length=20, blank=True, null=True)
-    hair_color = models.CharField(max_length=20, blank=True, null=True)
-    skin_color = models.CharField(max_length=20, blank=True, null=True)
-    home_world = models.ForeignKey('Planet', related_name="person_home_world", on_delete=models.PROTECT, blank=True, null=True)
+    film_vehicle_id = models.AutoField(primary_key=True)
+    film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
+    vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'person'
+        db_table = 'film_vehicle'
+        ordering = ['film', 'vehicle']
+        verbose_name = 'Film Vehicle'
+        verbose_name_plural = 'Film Vehicless'
+        unique_together = (('film', 'vehicle'),)
+
+
+class Language(models.Model):
+    """Representation of a language (e.g., Galatic Basic)."""
+
+    language_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, null=False)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'language'
         ordering = ['name']
-        verbose_name = 'Person'
-        verbose_name_plural = 'Persons'
-
-    # def get_absolute_url(self):
-    #     return reverse('person_detail', args=[self.url])
-
-    # def __unicode__(self):
-    #     return self.name
+        verbose_name = 'Language'
+        verbose_name_plural = 'Languages'
 
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('language_detail', kwargs={'pk': self.pk})
+
 
 class Planet(models.Model):
-    """ A planet i.e., Tatooine """
+    """Representation of a planet (e.g., Hoth)."""
 
     planet_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    rotation_period = models.CharField(max_length=40, blank=True, null=True)
-    orbital_period = models.CharField(max_length=40, blank=True, null=True)
-    diameter = models.CharField(max_length=40, blank=True, null=True)
-    climate = models.CharField(max_length=40, blank=True, null=True)
-    gravity = models.CharField(max_length=40, blank=True, null=True)
-    terrain = models.CharField(max_length=40, blank=True, null=True)
-    surface_water = models.CharField(max_length=40, blank=True, null=True)
-    population = models.CharField(max_length=40, blank=True, null=True)
+    name = models.CharField(max_length=50, null=False)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
@@ -146,134 +146,82 @@ class Planet(models.Model):
         verbose_name = 'Planet'
         verbose_name_plural = 'Planets'
 
-    # def __unicode__(self):
-    #     return self.name
-
     def __str__(self):
-        return self.name
-    
+        return self.title
+
     def get_absolute_url(self):
         return reverse('planet_detail', kwargs={'pk': self.pk})
 
-class Species(models.Model):
-    """ A species i.e., Wookiee. """
 
-    species_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=40)
-    classification = models.CharField(max_length=40, blank=True, null=True)
-    designation = models.CharField(max_length=40, blank=True, null=True)
-    average_height = models.CharField(max_length=40, blank=True, null=True)
-    skin_colors = models.CharField(max_length=200, blank=True, null=True)
-    hair_colors = models.CharField(max_length=200, blank=True, null=True)
-    eye_colors = models.CharField(max_length=200, blank=True, null=True)
-    average_lifespan = models.CharField(max_length=40, blank=True, null=True)
-    language = models.CharField(max_length=40, blank=True, null=True)
-    home_world = models.ForeignKey('Planet', related_name="species_home_world", on_delete=models.PROTECT, blank=True, null=True)
+class SentientBeing(models.Model):
+    """Representation of a sentient being (e.g., Luke Skywalker, R2D2)."""
+
+    sentient_being_id = models.AutoField(primary_key=True)
+    sentient_being_type = models.ForeignKey('SentientBeingType', related_name="sentient_being_sentient_being_type", on_delete=models.PROTECT, blank=True, null=True)
+    home_world = models.ForeignKey('Planet', related_name="sentient_being_home_world", on_delete=models.PROTECT, blank=True, null=True)
+    name_first = models.CharField(max_length=100, null=False)
+    name_last = models.CharField(max_length=100, null=True)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
-        db_table = 'species'
+        db_table = 'SentientBeing'
+        ordering = ['name_last, name_first']
+        verbose_name = 'Sentient Being'
+        verbose_name_plural = 'Sentient Beings'
+
+    def __str___(self):
+        if self.name_last:
+            return f"{self.name_first} {self.name_last}"
+        else:
+            return self.name_first
+
+    def get_absolute_url(self):
+        return reverse('sentient_being_detail', kwargs={'pk': self.pk})
+
+
+class SentientBeingType(models.Model):
+    """Representation of a sentient being type (e.g., Wookiee)."""
+
+    sentient_being_type_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, null=False)
+    language = models.ForeignKey('Language', related_name="sentient_being_language", on_delete=models.PROTECT, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'sentient_being_type'
         ordering = ['name']
-        verbose_name = 'Species'
-        verbose_name_plural = 'Species'
-
-    # def get_absolute_url(self):
-    #     return reverse('species_detail', args=[self.url])
-
-    # def __unicode__(self):
-    #     return self.name
+        verbose_name = 'Sentient Being Type'
+        verbose_name_plural = 'Sentient Being Types'
 
     def __str__(self):
         return self.name
 
-
-class Starship(models.Model):
-    """ A starship i.e. Death Star """
-
-    starship_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    starship_class = models.CharField(max_length=40, blank=True, null=True)
-    manufacturer = models.CharField(max_length=40, blank=True, null=True)
-    cost_in_credits = models.CharField(max_length=40, blank=True, null=True)
-    length = models.CharField(max_length=40, blank=True, null=True)
-    crew = models.CharField(max_length=40, blank=True, null=True)
-    passengers = models.CharField(max_length=40, blank=True, null=True)
-    max_atmosphering_speed = models.CharField(max_length=40, blank=True, null=True)
-    hyperdrive_rating = models.CharField(max_length=40, blank=True, null=True)
-    MGLT = models.CharField(max_length=40, blank=True, null=True)
-    cargo_capacity = models.CharField(max_length=40, blank=True, null=True)
-    consumables = models.CharField(max_length=40, blank=True, null=True)
-    pilots = models.ManyToManyField('Person', through='StarshipPilot', related_name='starship_pilot', blank=True)
-
-
-    class Meta:
-        managed = False
-        db_table = 'starship'
-        ordering = ['name']
-        verbose_name = 'Starship'
-        verbose_name_plural = 'Starships'
-
-    # def __unicode__(self):
-    #     return self.name
-
-    def __str__(self):
-        return self.name
-
-
-class StarshipPassenger(models.Model):
-    """
-	PK added to satisfy Django requirement. Row(s) will be deleted
-    if the corresponding parent record(s) is/are deleted.
-    This mirrors CONSTRAINT behavior in the DB back-end.
-	"""
-    starship_passenger_id = models.AutoField(primary_key=True)
-    starship = models.ForeignKey('Starship', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'starship_passenger'
-        ordering = ['starship', 'person']
-        verbose_name = 'Starship Passenger'
-        verbose_name_plural = 'Starship Passengers'
-        unique_together = (('starship', 'person'),)
-
-
-
-class StarshipPilot(models.Model):
-    """
-	PK added to satisfy Django requirement. Row(s) will be deleted
-    if the corresponding parent record(s) is/are deleted.
-    This mirrors CONSTRAINT behavior in the DB back-end.
-	"""
-    starship_pilot_id = models.AutoField(primary_key=True)
-    starship = models.ForeignKey('Starship', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'starship_pilot'
-        ordering = ['starship', 'person']
-        verbose_name = 'Starship Pilot'
-        verbose_name_plural = 'Starship Pilots'
-        unique_together = (('starship', 'person'),)
+    def get_absolute_url(self):
+        return reverse('sentient_being_type_detail', kwargs={'pk': self.pk})
 
 
 class Vehicle(models.Model):
-    """ A vehicle, i.e. Snowspeeder. """
+    """Representation of a vehicle (e.g., Snowspeeder, X-Wing starfighter)."""
 
     vehicle_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=40)
-    vehicle_class = models.CharField(max_length=40, blank=True, null=True)
-    manufacturer = models.CharField(max_length=40, blank=True, null=True)
-    length = models.CharField(max_length=40, blank=True, null=True)
-    cost_in_credits = models.CharField(max_length=40, blank=True, null=True)
-    crew = models.CharField(max_length=40, blank=True, null=True)
-    passengers = models.CharField(max_length=40, blank=True, null=True)
-    max_atmosphering_speed = models.CharField(max_length=40, blank=True, null=True)
-    cargo_capacity = models.CharField(max_length=40, blank=True, null=True)
-    consumables = models.CharField(max_length=40, blank=True, null=True)
-    pilots = models.ManyToManyField('Person', through='VehiclePilot', related_name='vehicle_pilot', blank=True)
+    vehicle_type = models.ForeignKey('VehicleType', related_name="vehicle_vehicle_type", on_delete=models.PROTECT, blank=True, null=True)
+    vehicle_class = models.ForeignKey('VehicleClass', related_name="vehicle_vehicle_class", on_delete=models.PROTECT, blank=True, null=True)
+    model = models.CharField(max_length=50, null=False)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
@@ -289,40 +237,51 @@ class Vehicle(models.Model):
         return reverse('vehicle_detail', kwargs={'pk': self.pk})
 
 
-class VehiclePassenger(models.Model):
-    """
-    PK added to satisfy Django requirement. Row(s) will be deleted
-    if the corresponding parent record(s) is/are deleted.
-    This mirrors CONSTRAINT behavior in the DB back-end.
-    """
+class VehicleClass(models.Model):
+    """Representation of a vehicle class (e.g., Starfighter)."""
 
-    vehicle_passenger_id = models.AutoField(primary_key=True)
-    vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'vehicle_passenger'
-        ordering = ['vehicle', 'person']
-        verbose_name = 'Vehicle Passenger'
-        verbose_name_plural = 'Vehicle Passenger'
-        unique_together = (('vehicle', 'person'),)
-
-
-class VehiclePilot(models.Model):
-    """
-	PK added to satisfy Django requirement. Row(s) will be deleted
-    if the corresponding parent record(s) is/are deleted.
-    This mirrors CONSTRAINT behavior in the DB back-end.
-	"""
-    vehicle_pilot_id = models.AutoField(primary_key=True)
-    vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+    vehicle_class_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, null=False)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = False
-        db_table = 'vehicle_pilot'
-        ordering = ['vehicle', 'person']
-        verbose_name = 'Vehicle Pilot'
-        verbose_name_plural = 'Vehicle Pilots'
-        unique_together = (('vehicle', 'person'),)
+        db_table = 'vehicle_class'
+        ordering = ['name']
+        verbose_name = 'Vehicle Class'
+        verbose_name_plural = 'Vehicle Classes'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('vehicle_class_detail', kwargs={'pk': self.pk})
+
+
+class VehicleType(models.Model):
+    """Representation of a vehicle type (e.g., Aquatic)."""
+
+    vehicle_type_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=50, null=False)
+    description = models.TextField(blank=True, null=True)
+    attributes = models.JSONField(blank=True, null=True)
+    attributes_orig = models.JSONField(blank=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        managed = False
+        db_table = 'vehicle_type'
+        ordering = ['name']
+        verbose_name = 'Vehicle Type'
+        verbose_name_plural = 'Vehicle Types'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('vehicle_type_detail', kwargs={'pk': self.pk})
