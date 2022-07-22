@@ -24,6 +24,20 @@ class FilmViewSet(viewsets.ModelViewSet):
         return queryset.order_by('film_id')
 
 
+class PlanetViewSet(viewsets.ModelViewSet):
+    queryset = Planet.objects.all()
+    serializer_class = PlanetSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Planet.objects.all()
+        name = self.request.query_params.get('name', None)
+        if name:
+            queryset = queryset.filter(name__contains=name)
+
+        return queryset.order_by('planet_id')
+
+
 class SentientBeingViewSet(viewsets.ModelViewSet):
     queryset = SentientBeing.objects.all()
     serializer_class = SentientBeingSerializer
@@ -39,20 +53,6 @@ class SentientBeingViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(name__contains=name)
 
         return queryset.order_by('person_id')
-
-
-class PlanetViewSet(viewsets.ModelViewSet):
-    queryset = Planet.objects.all()
-    serializer_class = PlanetSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        queryset = Planet.objects.all()
-        name = self.request.query_params.get('name', None)
-        if name:
-            queryset = queryset.filter(name__contains=name)
-
-        return queryset.order_by('planet_id')
 
 
 class VehicleViewSet(viewsets.ModelViewSet):
