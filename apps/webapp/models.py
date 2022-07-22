@@ -55,7 +55,7 @@ class FilmCharacter(models.Model):
 
     film_character_id = models.AutoField(primary_key=True)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
-    sentient_being = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+    sentient_being = models.ForeignKey('SentientBeing', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -171,7 +171,7 @@ class SentientBeing(models.Model):
     class Meta:
         managed = False
         db_table = 'SentientBeing'
-        ordering = ['name_last, name_first']
+        ordering = ['name_last', 'name_first']
         verbose_name = 'Sentient Being'
         verbose_name_plural = 'Sentient Beings'
 
@@ -227,7 +227,7 @@ class Vehicle(models.Model):
     class Meta:
         managed = False
         db_table = 'vehicle'
-        ordering = ['name']
+        ordering = ['model']
         verbose_name = 'Vehicle'
         verbose_name_plural = 'Vehicles'
 
