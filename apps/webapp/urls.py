@@ -11,7 +11,7 @@ from . import views
 # admin.autodiscover()
 # router = routers.DefaultRouter()
 
-# router.register(r"persons", resource_views.PersonViewSet)
+# router.register(r"sentient_beings", resource_views.sentient_beingViewSet)
 # router.register(r"planets", resource_views.PlanetViewSet)
 # router.register(r"films", resource_views.FilmViewSet)
 # router.register(r"species", resource_views.SpeciesViewSet)
@@ -26,7 +26,7 @@ from . import views
 #     url(r"^about$", "swapi.views.about"),
 #     url(r"^stats$", "swapi.views.stats"),
 #     url(r"^stripe/donation", "swapi.views.stripe_donation"),
-#     url(r"^api/persons/schema$", "resources.schemas.persons"),
+#     url(r"^api/sentient_beings/schema$", "resources.schemas.sentient_beings"),
 #     url(r"^api/planets/schema$", "resources.schemas.planets"),
 #     url(r"^api/films/schema$", "resources.schemas.films"),
 #     url(r"^api/species/schema$", "resources.schemas.species"),
@@ -48,33 +48,29 @@ urlpatterns = [
     path('films/<int:pk>/delete/', views.FilmDeleteView.as_view(), name='film_delete'),
     path('films/<int:pk>/update/', views.FilmUpdateview.as_view(), name='film_update'),
     path('films_docs/', views.FilmPageView.as_view(), name='film_docs'),
-    path('persons/', views.PersonListView.as_view(), name='persons'),
-    path('persons/<int:pk>/', views.PersonDetailView.as_view(), name='person_detail'),
-    path('persons_docs/', views.PersonPageView.as_view(), name='person_docs'),
-    # path(r"^stats$", "swapi.views.stats"),
-    # path(r"^stripe/donation", "swapi.views.stripe_donation"),
-    # path(r"^api/persons/schema$", "resources.schemas.persons"),
-    # path(r"^api/planets/schema$", "resources.schemas.planets"),
-    # path(r"^api/films/schema$", "resources.schemas.films"),
     path('planets/', views.PlanetListView.as_view(), name='planets'),
     path('planets/new/', views.PlanetCreateView.as_view(), name='planet_new'),
     path('planets/<int:pk>/', views.PlanetDetailView.as_view(), name='planet_detail'),
 	path('planets/<int:pk>/delete/', views.PlanetDeleteView.as_view(), name='planet_delete'),
 	path('planets/<int:pk>/update/', views.PlanetUpdateView.as_view(), name='planet_update'),
     path('planets_docs/', views.PlanetPageView.as_view(), name='planet_docs'),
-    path('species/', views.SpeciesListView.as_view(), name='species'),
-    path('species/<int:pk>/', views.SpeciesDetailView.as_view(), name='species_detail'),
-    path('species_docs/', views.SpeciesPageView.as_view(), name='species_docs'),
-    path('starships/', views.StarshipListView.as_view(), name='starships'),
-    path('starships/<int:pk>/', views.StarshipDetailView.as_view(), name='starship_detail'),
-    path('starships_docs/', views.StarshipPageView.as_view(), name='starship_docs'),
+    path('sentient_beings/', views.SentientBeingListView.as_view(), name='sentient_beings'),
+    # path('sentient_beings/new/', views.SentientBeingCreateView.as_view(), name='sentient_beings_new'),
+    path('sentient_beings/<int:pk>/', views.SentientBeingDetailView.as_view(), name='sentient_being_detail'),
+    # path('sentient_beings/<int:pk>/delete/', views.SentientBeingDeleteView.as_view(), name='sentient_beings_delete'),
+	# path('sentient_beings/<int:pk>/update/', views.SentientBeingUpdateView.as_view(), name='sentient_beings_update'),
+    path('sentient_beings_docs/', views.SentientBeingPageView.as_view(), name='sentient_being_docs'),
     path('vehicles/', views.VehicleListView.as_view(), name='vehicles'),
     path('vehicles/new/', views.VehicleCreateView.as_view(), name='vehicle_new'),
 	path('vehicles/<int:pk>/', views.VehicleDetailView.as_view(), name='vehicle_detail'),
 	path('vehicles/<int:pk>/delete/', views.VehicleDeleteView.as_view(), name='vehicle_delete'),
 	path('vehicles/<int:pk>/update/', views.VehicleUpdateView.as_view(), name='vehicle_update'),
-    path('vehicles_docs/', views.VehiclePageView.as_view(), name='vehicle_docs')
+    path('vehicles_docs/', views.VehiclePageView.as_view(), name='vehicle_docs'),
+    # path(r"^stats$", "swapi.views.stats"),
+    # path(r"^stripe/donation", "swapi.views.stripe_donation"),
+     # path(r"^api/films/schema$", "resources.schemas.films"),
+    # path(r"^api/sentient_beings/schema$", "resources.schemas.sentient_beings"),
+    # path(r"^api/planets/schema$", "resources.schemas.planets"),
     # path(r"^api/vehicles/schema$", "resources.schemas.vehicles"),
-    # path(r"^api/starships/schema$", "resources.schemas.starships"),
     # path(r"^api/", include(router.urls)),
 ]

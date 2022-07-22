@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from apps.webapp.models import Film, Person, Planet, Vehicle, Species, Starship, FilmCharacter, FilmPlanet
+from apps.webapp.models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle
 
 
 class FilmSerializer(serializers.HyperlinkedModelSerializer):
@@ -25,10 +25,10 @@ class FilmSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class PersonSerializer(serializers.HyperlinkedModelSerializer):
+class SentientBeingSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = Person
+        model = SentientBeing
         fields = (
             'name',
             'birth_year',
@@ -86,45 +86,6 @@ class VehicleSerializer(serializers.HyperlinkedModelSerializer):
             'max_atmosphering_speed',
             'cargo_capacity',
             'consumables'
-        )
-
-
-class SpeciesSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Species
-
-        fields = {
-            'name',
-            'classification',
-            'designation',
-            'average_height',
-            'skin_colors',
-            'hair_colors',
-            'eye_colors',
-            'average_lifespan',
-            'language',
-            'home_world'
-        }
-
-
-class StarshipSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Starship
-        fields = (
-            "name",
-            "starship_class",
-            "manufacturer",
-            "cost_in_credits",
-            "length",
-            "crew",
-            "passengers",
-            "max_atmosphering_speed",
-            "hyperdrive_rating",
-            "MGLT",
-            "cargo_capacity",
-            "consumables",
-            # "pilots"
         )
 
 
