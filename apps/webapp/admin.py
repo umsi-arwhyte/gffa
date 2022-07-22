@@ -136,5 +136,5 @@ class VehicleAdmin(admin.ModelAdmin):
         'date_created',
         'date_modified',
     )
-    list_filter = ('name',)
-    ordering = ('name',)
+    list_filter = ('model',)
+    ordering = ('model',)

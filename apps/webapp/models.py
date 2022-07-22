@@ -12,6 +12,7 @@ class Film(models.Model):
     attributes_orig = models.JSONField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+
     class Meta:
         managed = False
         db_table = 'film'
@@ -25,7 +26,7 @@ class Film(models.Model):
     def get_absolute_url(self):
         return reverse('film_detail', kwargs={'pk': self.pk})
 
-    # characters = models.ManyToManyField('Person', through='FilmCharacter', related_name='film_person', blank=True)
+    # characters = models.ManyToManyField('Person', through='FilmCharacter', related_name='film_sentient_being', blank=True)
     # planets = models.ManyToManyField('Planet', through='FilmPlanet', related_name='film_planet', blank=True)
     # starships = models.ManyToManyField('Starship', related_name="film_starships", blank=True)
     # vehicles = models.ManyToManyField('Vehicle', related_name="film_vehicles", blank=True)
@@ -54,15 +55,15 @@ class FilmCharacter(models.Model):
 
     film_character_id = models.AutoField(primary_key=True)
     film = models.ForeignKey('Film', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
+    sentient_being = models.ForeignKey('Person', on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'film_character'
-        ordering = ['film', 'person']
+        ordering = ['film', 'sentient_being']
         verbose_name = 'Film Character'
         verbose_name_plural = 'Film Characters'
-        unique_together = (('film', 'person'),)
+        unique_together = (('film', 'sentient_being'),)
 
 
 class FilmPlanet(models.Model):
