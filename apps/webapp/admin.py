@@ -1,273 +1,140 @@
 from django.contrib import admin
 from . models import (
-    Film, FilmCharacter, FilmPlanet,
-    Person,
+    Film, FilmCharacter, FilmPlanet, FilmVehicle,
     Planet,
-    Species,
-    Starship, StarshipPassenger, StarshipPilot,
-    Vehicle, VehiclePassenger, VehiclePilot
+    SentientBeing, SentientBeingType,
+    Vehicle, VehicleClass, VehicleType
     )
 
 @admin.register(Film)
 class FilmAdmin(admin.ModelAdmin):
     """Film administration."""
 
-    fields = [
+    fields = (
         'title',
-        'episode_id',
-        'opening_crawl',
-        'director',
-        'producer',
-        'release_date',
-    ]
-    list_display = [
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    list_display = (
         'title',
-        'episode_id',
-        'opening_crawl',
-        'director',
-        'producer',
-        'release_date',
-        # 'characters',
-        # 'planets',
-        # 'film_species',
-        # 'film_starships',
-        # 'film_vehicles'
-    ]
-    list_filter = ['title']
-    filter_horizontal = [
-        # 'characters',
-        # 'planets',
-        # 'species',
-        # 'starships',
-        # 'vehicles'
-    ]
-    ordering = ['title']
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified'
+    )
+    list_filter = ('title',)
+    filter_horizontal = ()
+    ordering = ('title',)
 
 
 @admin.register(FilmCharacter)
 class FilmCharacterAdmin(admin.ModelAdmin):
     """FilmCharacter administration."""
 
-    fields = ['film', 'person']
-    list_display = ['film', 'person']
-    list_filter = ['film']
-    ordering = ['film', 'person']
+    fields = ('film', 'sentient_being')
+    list_display = ('film', 'sentient_being')
+    list_filter = ('film',)
+    ordering = ('film', 'sentient_being')
 
 
 @admin.register(FilmPlanet)
 class FilmPlanetAdmin(admin.ModelAdmin):
     """FilmPlanet administration."""
 
-    fields = ['film', 'planet']
-    list_display = ['film', 'planet']
-    list_filter = ['film']
-    ordering = ['film', 'planet']
+    fields = ('film', 'planet')
+    list_display = ('film', 'planet')
+    list_filter = ('film',)
+    ordering = ('film', 'planet')
 
 
-@admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
-    """Person administration."""
+@admin.register(FilmVehicle)
+class FilmVehicleAdmin(admin.ModelAdmin):
+    """FilmVehicle administration."""
 
-    fields = [
-        'name',
-        'species',
-        'birth_year',
-        'gender',
-        'height',
-        'mass',
-        'eye_color',
-        'hair_color',
-        'skin_color',
-        'home_world'
-    ]
-    list_display = [
-        'name',
-        'species',
-        'birth_year',
-        'gender',
-        'height',
-        'mass',
-        'eye_color',
-        'hair_color',
-        'skin_color',
-        'home_world'
-    ]
-    list_filter = ['name']
-    ordering = ['name']
+    fields = ('film', 'vehicle')
+    list_display = ('film', 'vehicle')
+    list_filter = ('film',)
+    ordering = ('film', 'vehicle')
+
+
+@admin.register(SentientBeing)
+class SentientBeingAdmin(admin.ModelAdmin):
+    """SentientBeing administration."""
+
+    fields =  (
+        'sentient_being_type',
+        'name_last',
+        'name_first',
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    list_display =  (
+        'sentient_being_type',
+        'name_last',
+        'name_first',
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    list_filter = ('name_last', 'name_first')
+    ordering = ('name_last', 'name_first')
 
 
 @admin.register(Planet)
 class PlanetAdmin(admin.ModelAdmin):
     """Planet administration."""
 
-    fields = [
+    fields =  (
         'name',
-        'rotation_period',
-        'orbital_period',
-        'diameter',
-        'climate',
-        'gravity',
-        'terrain',
-        'surface_water',
-        'population'
-    ]
-
-    list_display = [
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    list_display =  (
         'name',
-        'rotation_period',
-        'orbital_period',
-        'diameter',
-        'climate',
-        'gravity',
-        'terrain',
-        'surface_water',
-        'population'
-    ]
-
-    ordering = ['name']
-
-    list_filter = ['name']
-
-
-@admin.register(Species)
-class SpeciesAdmin(admin.ModelAdmin):
-    """Species administration."""
-
-    fields = [
-        'name',
-        'classification',
-        'designation',
-        'average_height',
-        'skin_colors',
-        'hair_colors',
-        'eye_colors',
-        'average_lifespan',
-        'language',
-        'home_world'
-    ]
-    list_display = [
-        'name',
-        'classification',
-        'designation',
-        'average_height',
-        'skin_colors',
-        'hair_colors',
-        'eye_colors',
-        'average_lifespan',
-        'language',
-        'home_world'
-    ]
-    list_filter = ['name']
-    ordering = ['name']
-
-
-@admin.register(Starship)
-class StarshipAdmin(admin.ModelAdmin):
-    """Starship administration."""
-
-    fields = [
-        'name',
-        'starship_class',
-        'manufacturer',
-        'cost_in_credits',
-        'length',
-        'crew',
-        'passengers',
-        'max_atmosphering_speed',
-        'hyperdrive_rating',
-        'MGLT',
-        'cargo_capacity',
-        'consumables',
-        # 'pilots'
-    ]
-    list_display = [
-        'starship_class',
-        'manufacturer',
-        'cost_in_credits',
-        'length',
-        'crew',
-        'passengers',
-        'max_atmosphering_speed',
-        'hyperdrive_rating',
-        'MGLT',
-        'cargo_capacity',
-        'consumables',
-        # 'pilots'
-    ]
-    list_filter = ['name']
-    ordering = ['name']
-
-
-@admin.register(StarshipPassenger)
-class StarshipPassengerAdmin(admin.ModelAdmin):
-    """StarshipPassenger administration."""
-
-    fields = ['starship', 'person']
-    list_display = ['starship', 'person']
-    list_filter = ['starship']
-    ordering = ['starship', 'person']
-
-
-@admin.register(StarshipPilot)
-class StarshipPilotAdmin(admin.ModelAdmin):
-    """StarshipPilot administration."""
-
-    fields = ['starship', 'person']
-    list_display = ['starship', 'person']
-    list_filter = ['starship']
-    ordering = ['starship', 'person']
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    ordering = ('name',)
+    list_filter = ('name',)
 
 @admin.register(Vehicle)
 class VehicleAdmin(admin.ModelAdmin):
     """Vehicle administration."""
 
-    fields = [
-        'name',
+    fields =  (
+        'vehicle_type',
         'vehicle_class',
-        'manufacturer',
-        'length',
-        'cost_in_credits',
-        'crew',
-        'passengers',
-        'max_atmosphering_speed',
-        'cargo_capacity',
-        'consumables',
-        # 'pilots'
-    ]
-    list_display = [
-        'name',
+        'model',
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    list_display =  (
+        'vehicle_type',
         'vehicle_class',
-        'manufacturer',
-        'length',
-        'cost_in_credits',
-        'crew',
-        'passengers',
-        'max_atmosphering_speed',
-        'cargo_capacity',
-        'consumables',
-        # 'pilots'
-    ]
-    list_filter = ['name']
-    ordering = ['name']
-
-
-@admin.register(VehiclePassenger)
-class VehiclePassengerAdmin(admin.ModelAdmin):
-    """VehiclePassenger administration."""
-
-    fields = ['vehicle', 'person']
-    list_display = ['vehicle', 'person']
-    list_filter = ['vehicle']
-    ordering = ['vehicle', 'person']
-
-
-@admin.register(VehiclePilot)
-class VehiclePilotAdmin(admin.ModelAdmin):
-    """VehiclePilot administration."""
-
-    fields = ['vehicle', 'person']
-    list_display = ['vehicle', 'person']
-    list_filter = ['vehicle']
-    ordering = ['vehicle', 'person']
-
-
+        'model',
+        'description',
+        'attributes',
+        'attributes_orig',
+        'date_created',
+        'date_modified',
+    )
+    list_filter = ('model',)
+    ordering = ('model',)

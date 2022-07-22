@@ -5,7 +5,7 @@ from django.views import generic
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from .forms import FilmForm, PlanetForm, VehicleForm
-from . models import Film, FilmCharacter, FilmPlanet, Person, Planet, Species, Starship, Vehicle
+from . models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle
 
 
 
@@ -19,10 +19,8 @@ class AboutPageView(generic.TemplateView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		context['Films'] = Film.objects.all().count()
-		context['Persons'] = Person.objects.all().count()
+		context['SentientBeings'] = SentientBeing.objects.all().count()
 		context['Planets'] = Planet.objects.all().count()
-		context['Species'] = Species.objects.all().count()
-		context['Starships'] = Starship.objects.all().count()
 		context['Vehicles'] = Vehicle.objects.all().count()
 
 		return context
@@ -136,7 +134,7 @@ class FilmUpdateview(generic.UpdateView):
 
 		# Insert new unmatched character entries
 		for character in new_characters:
-			new_id = character.person_id
+			new_id = character.sentient_being_id
 			new_character_ids.append(new_id)
 			if new_id in old_character_ids:
 				continue
@@ -189,20 +187,12 @@ class FilmPageView(generic.TemplateView):
 	template_name = 'webapp/film_docs.html'
 
 
-class PersonPageView(generic.TemplateView):
-	template_name = 'webapp/person_docs.html'
+class SentientBeingPageView(generic.TemplateView):
+	template_name = 'webapp/sentient_being_docs.html'
 
 
 class PlanetPageView(generic.TemplateView):
 	template_name = 'webapp/planet_docs.html'
-
-
-class SpeciesPageView(generic.TemplateView):
-	template_name = 'webapp/species_docs.html'
-
-
-class StarshipPageView(generic.TemplateView):
-	template_name = 'webapp/starship_docs.html'
 
 
 class VehiclePageView(generic.TemplateView):
@@ -228,33 +218,31 @@ class FilmListView(generic.ListView):
 
 	def get_queryset(self):
 		return Film.objects.all()
-		# return Person.objects.select_related('homeworld').order_by('name')
+		# return SentientBeing.objects.select_related('homeworld').order_by('name')
 
 
-class PersonDetailView(generic.DetailView):
-	model = Person
-	context_object_name = 'persons'
-	template_name = 'webapp/person_detail.html'
+class SentientBeingDetailView(generic.DetailView):
+	model = SentientBeing
+	context_object_name = 'sentient_beings'
+	template_name = 'webapp/sentient_being_detail.html'
 
 	def get_object(self):
-		person = super().get_object()
-		return person
+		sentient_being = super().get_object()
+		return sentient_being
 
 
-class PersonListView(generic.ListView):
-	model = Person
-	context_object_name = 'persons'
-	template_name = 'webapp/persons.html'
+class SentientBeingListView(generic.ListView):
+	model = SentientBeing
+	context_object_name = 'sentient_beings'
+	template_name = 'webapp/sentient_beings.html'
 	# paginate_by = 20
 
 	# def dispatch(self, *args, **kwargs):
 	# 	return super().dispatch(*args, **kwargs)
 
 	def get_queryset(self):
-		return Person.objects.all()
-		# return Person.objects.select_related('homeworld').order_by('name')
-
-
+		return SentientBeing.objects.all()
+		# return SentientBeing.objects.select_related('homeworld').order_by('name')
 
 
 class PlanetDetailView(generic.DetailView):
@@ -277,7 +265,7 @@ class PlanetListView(generic.ListView):
 
 	def get_queryset(self):
 		return Planet.objects.all()
-		# return Person.objects.select_related('homeworld').order_by('name')
+		# return SentientBeing.objects.select_related('homeworld').order_by('name')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -346,49 +334,6 @@ class PlanetDeleteView(generic.DeleteView):
 
 		return HttpResponseRedirect(self.get_success_url())
 
-class SpeciesDetailView(generic.DetailView):
-	model = Species
-	context_object_name = 'species'
-	template_name = 'webapp/species_detail.html'
-
-	def get_object(self):
-		species = super().get_object()
-		return species
-
-
-class SpeciesListView(generic.ListView):
-	model = Species
-	context_object_name = 'species'
-	template_name = 'webapp/species.html'
-	# paginate_by = 20
-
-	# def dispatch(self, *args, **kwargs):
-	# 	return super().dispatch(*args, **kwargs)
-
-	def get_queryset(self):
-		return Species.objects.all()
-		# return Species.objects.select_related('homeworld').order_by('name')
-
-
-class StarshipDetailView(generic.DetailView):
-	model = Starship
-	context_object_name = 'starships'
-	template_name = 'webapp/starship_detail.html'
-
-	def get_object(self):
-		starship = super().get_object()
-		return starship
-
-
-class StarshipListView(generic.ListView):
-	model = Starship
-	context_object_name = 'starships'
-	template_name = 'webapp/starships.html'
-
-
-	def get_queryset(self):
-		return Starship.objects.all()
-		# return Starship.objects.select_related('?').order_by('?')
 
 @method_decorator(login_required, name='dispatch')
 class VehicleCreateView(generic.View):
