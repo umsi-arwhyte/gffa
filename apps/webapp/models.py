@@ -170,7 +170,7 @@ class SentientBeing(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'SentientBeing'
+        db_table = 'sentient_being'
         ordering = ['name_last', 'name_first']
         verbose_name = 'Sentient Being'
         verbose_name_plural = 'Sentient Beings'
