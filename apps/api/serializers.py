@@ -23,7 +23,7 @@ class SentientBeingSerializer(serializers.HyperlinkedModelSerializer):
         model = SentientBeing
         fields = (
             'sentient_being_type_id',
-            'home_world_id',
+            'home_world',
             'name_first',
             'name_last',
             'description',
