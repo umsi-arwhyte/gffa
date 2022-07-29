@@ -19,12 +19,10 @@
             <h5>Resources</h5>
             <ul class="list-group">
                 <li class="list-group-item"><a href="{% url 'root' %}">Root</a></li>
-                <li class="list-group-item"><a href="{% url 'person_docs' %}">Persons</a></li>
                 <li class="list-group-item"><a href="{% url 'film_docs' %}">Films</a></li>
-                <li class="list-group-item"><a href="{% url 'starship_docs' %}">Starships</a></li>
-                <li class="list-group-item"><a href="{% url 'vehicle_docs' %}">Vehicles</a></li>
-                <li class="list-group-item"><a href="{% url 'species_docs' %}">Species</a></li>
                 <li class="list-group-item"><a href="{% url 'planet_docs' %}">Planets</a></li>
+                <li class="list-group-item"><a href="{% url 'sentient_being_docs' %}">Sentient Beings</a></li>
+                <li class="list-group-item"><a href="{% url 'vehicle_docs' %}">Vehicles</a></li>
             </ul>
         </div>
         <div class="col-md-9 col-sm-9">
@@ -58,8 +56,8 @@ Content-Type: application/json
     "orbital_period": "304",
     "population": "200000",
     "residents": [
-        "https://swapi.py4e.com/api/persons/1/",
-        "https://swapi.py4e.com/api/persons/2/",
+        "https://swapi.py4e.com/api/sentient_beings/1/",
+        "https://swapi.py4e.com/api/sentient_beings/2/",
         ...
     ],
     "rotation_period": "23",
@@ -103,7 +101,7 @@ Content-Type: application/json
             <h3 id="searching">Searching</h3>
             <p>All resources support a <code>search</code> parameter that filters the set of
                 resources returned. This allows you to make queries like:</p>
-            <pre><code>https://swapi.py4e.com/api/persons/?search=r2</code></pre>
+            <pre><code>https://swapi.py4e.com/api/sentient_beings/?search=r2</code></pre>
             <p>All searches will use case-insensitive partial matches on the set of search fields.
                 To see the set of search fields for each resource, check out the individual resource
                 documentation. For more information on advanced search terms see <a

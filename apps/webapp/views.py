@@ -8,11 +8,6 @@ from .forms import FilmForm, PlanetForm, VehicleForm
 from . models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle
 
 
-
-class HomePageView(generic.TemplateView):
-	template_name = 'webapp/home.html'
-
-
 class AboutPageView(generic.TemplateView):
 	template_name = 'webapp/about.html'
 
@@ -30,24 +25,8 @@ class ContributerPageView(generic.TemplateView):
 	template_name = 'webapp/contributers.html'
 
 
-# def about(request):
-#     # stripe_key = settings.STRIPE_KEYS['publishable']
-#     # data = cache.get('resource_data')
-#     # if not data:
-#     #     data = get_resource_stats()
-#     #     cache.set('resource_data', data, 10000)
-#     # data['stripe_key'] = stripe_key
-
-#     data = 'A long time ago in a galaxy far, far away.'
-#     return render(request, "about.html", data)
-
-
 class DocsPageView(generic.TemplateView):
 	template_name = 'webapp/docs.html'
-
-
-class RootPageView(generic.TemplateView):
-	template_name = 'webapp/root.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -108,8 +87,35 @@ class FilmDeleteView(generic.DeleteView):
 		return HttpResponseRedirect(self.get_success_url())
 
 
+class FilmDetailView(generic.DetailView):
+	model = Film
+	context_object_name = 'film'
+	template_name = 'webapp/film_detail.html'
+
+	def get_object(self):
+		return super().get_object()
+
+
+class FilmListView(generic.ListView):
+	model = Film
+	context_object_name = 'films'
+	template_name = 'webapp/films.html'
+	# paginate_by = 20
+
+	# def dispatch(self, *args, **kwargs):
+	# 	return super().dispatch(*args, **kwargs)
+
+	def get_queryset(self):
+		return Film.objects.all()
+		# return SentientBeing.objects.select_related('homeworld').order_by('name')
+
+
+class FilmPageView(generic.TemplateView):
+	template_name = 'webapp/film_docs.html'
+
+
 @method_decorator(login_required, name='dispatch')
-class FilmUpdateview(generic.UpdateView):
+class FilmUpdateView(generic.UpdateView):
 	model = Film
 	form_class = FilmForm
 	context_object_name = 'film'
@@ -183,89 +189,8 @@ class FilmUpdateview(generic.UpdateView):
 		return redirect('film_detail', pk=film.pk)
 
 
-class FilmPageView(generic.TemplateView):
-	template_name = 'webapp/film_docs.html'
-
-
-class SentientBeingPageView(generic.TemplateView):
-	template_name = 'webapp/sentient_being_docs.html'
-
-
-class PlanetPageView(generic.TemplateView):
-	template_name = 'webapp/planet_docs.html'
-
-
-class VehiclePageView(generic.TemplateView):
-	template_name = 'webapp/vehicle_docs.html'
-
-
-class FilmDetailView(generic.DetailView):
-	model = Film
-	context_object_name = 'film'
-	template_name = 'webapp/film_detail.html'
-
-	def get_object(self):
-		return super().get_object()
-
-class FilmListView(generic.ListView):
-	model = Film
-	context_object_name = 'films'
-	template_name = 'webapp/films.html'
-	# paginate_by = 20
-
-	# def dispatch(self, *args, **kwargs):
-	# 	return super().dispatch(*args, **kwargs)
-
-	def get_queryset(self):
-		return Film.objects.all()
-		# return SentientBeing.objects.select_related('homeworld').order_by('name')
-
-
-class SentientBeingDetailView(generic.DetailView):
-	model = SentientBeing
-	context_object_name = 'sentient_beings'
-	template_name = 'webapp/sentient_being_detail.html'
-
-	def get_object(self):
-		sentient_being = super().get_object()
-		return sentient_being
-
-
-class SentientBeingListView(generic.ListView):
-	model = SentientBeing
-	context_object_name = 'sentient_beings'
-	template_name = 'webapp/sentient_beings.html'
-	# paginate_by = 20
-
-	# def dispatch(self, *args, **kwargs):
-	# 	return super().dispatch(*args, **kwargs)
-
-	def get_queryset(self):
-		return SentientBeing.objects.all()
-		# return SentientBeing.objects.select_related('homeworld').order_by('name')
-
-
-class PlanetDetailView(generic.DetailView):
-	model = Planet
-	context_object_name = 'planets'
-	template_name = 'webapp/planet_detail.html'
-
-	def get_object(self):
-		planet = super().get_object()
-		return planet
-
-class PlanetListView(generic.ListView):
-	model = Planet
-	context_object_name = 'planets'
-	template_name = 'webapp/planets.html'
-	# paginate_by = 20
-
-	# def dispatch(self, *args, **kwargs):
-	# 	return super().dispatch(*args, **kwargs)
-
-	def get_queryset(self):
-		return Planet.objects.all()
-		# return SentientBeing.objects.select_related('homeworld').order_by('name')
+class HomePageView(generic.TemplateView):
+	template_name = 'webapp/home.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -295,23 +220,6 @@ class PlanetCreateView(generic.View):
 
 
 @method_decorator(login_required, name='dispatch')
-class PlanetUpdateView(generic.UpdateView):
-	model = Planet
-	form_class = PlanetForm
-	context_object_name = 'planet'
-	success_message = "Planet updated successfully!"
-	template_name = 'webapp/planet_update.html'
-
-	def dispatch(self, *args, **kwargs):
-		return super().dispatch(*args, **kwargs)
-
-	def form_valid(self, form):
-		planet = form.save(commit=False)
-		planet.save()
-
-		return HttpResponseRedirect(planet.get_absolute_url())
-
-@method_decorator(login_required, name='dispatch')
 class PlanetDeleteView(generic.DeleteView):
 	model = Planet
 	success_message = "Planet deleted successfully!"
@@ -333,6 +241,83 @@ class PlanetDeleteView(generic.DeleteView):
 		self.object.delete()
 
 		return HttpResponseRedirect(self.get_success_url())
+
+
+class PlanetDetailView(generic.DetailView):
+	model = Planet
+	context_object_name = 'planets'
+	template_name = 'webapp/planet_detail.html'
+
+	def get_object(self):
+		planet = super().get_object()
+		return planet
+
+class PlanetListView(generic.ListView):
+	model = Planet
+	context_object_name = 'planets'
+	template_name = 'webapp/planets.html'
+	# paginate_by = 20
+
+	# def dispatch(self, *args, **kwargs):
+	# 	return super().dispatch(*args, **kwargs)
+
+	def get_queryset(self):
+		return Planet.objects.all()
+		# return SentientBeing.objects.select_related('homeworld').order_by('name')
+
+
+class PlanetPageView(generic.TemplateView):
+	template_name = 'webapp/planet_docs.html'
+
+
+@method_decorator(login_required, name='dispatch')
+class PlanetUpdateView(generic.UpdateView):
+	model = Planet
+	form_class = PlanetForm
+	context_object_name = 'planet'
+	success_message = "Planet updated successfully!"
+	template_name = 'webapp/planet_update.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def form_valid(self, form):
+		planet = form.save(commit=False)
+		planet.save()
+
+		return HttpResponseRedirect(planet.get_absolute_url())
+
+
+class RootPageView(generic.TemplateView):
+	template_name = 'webapp/root.html'
+
+
+class SentientBeingDetailView(generic.DetailView):
+	model = SentientBeing
+	context_object_name = 'sentient_beings'
+	template_name = 'webapp/sentient_being_detail.html'
+
+	def get_object(self):
+		sentient_being = super().get_object()
+		return sentient_being
+
+
+class SentientBeingListView(generic.ListView):
+	model = SentientBeing
+	context_object_name = 'sentient_beings'
+	template_name = 'webapp/sentient_beings.html'
+	# paginate_by = 20
+
+	# def dispatch(self, *args, **kwargs):
+	# 	return super().dispatch(*args, **kwargs)
+
+	def get_queryset(self):
+		return SentientBeing.objects.all()
+		# return SentientBeing.objects.select_related('homeworld').order_by('name')
+
+
+class SentientBeingPageView(generic.TemplateView):
+	template_name = 'webapp/sentient_being_docs.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -361,6 +346,7 @@ class VehicleCreateView(generic.View):
 		form = VehicleForm()
 		return render(request, 'webapp/vehicle_new.html', {'form': form})
 
+
 @method_decorator(login_required, name='dispatch')
 class VehicleDeleteView(generic.DeleteView):
 	model = Vehicle
@@ -384,6 +370,7 @@ class VehicleDeleteView(generic.DeleteView):
 
 		return HttpResponseRedirect(self.get_success_url())
 
+
 class VehicleDetailView(generic.DetailView):
 	model = Vehicle
 	context_object_name = 'vehicles'
@@ -400,6 +387,11 @@ class VehicleListView(generic.ListView):
 
 	def get_queryset(self):
 		return Vehicle.objects.all()
+
+
+class VehiclePageView(generic.TemplateView):
+	template_name = 'webapp/vehicle_docs.html'
+
 
 @method_decorator(login_required, name='dispatch')
 class VehicleUpdateView(generic.UpdateView):
