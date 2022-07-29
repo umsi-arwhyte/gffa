@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from apps.webapp.models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle
+from apps.webapp.models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle, Language, SentientBeingType
 
 
 class FilmSerializer(serializers.HyperlinkedModelSerializer):
@@ -9,19 +9,11 @@ class FilmSerializer(serializers.HyperlinkedModelSerializer):
         model = Film
         fields = (
             'title',
-            'episode_id',
-            'opening_crawl',
-            'director',
-            'producer',
-            'release_date',
-            # 'species',
-            # 'starships',
-            # 'vehicles',
-            'characters',
-            'planets',
-            # 'url',
-            # 'created',
-            # 'edited'
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
         )
 
 
@@ -30,22 +22,15 @@ class SentientBeingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SentientBeing
         fields = (
-            'name',
-            'birth_year',
-            'eye_color',
-            'gender',
-            'hair_color',
-            'height',
-            'mass',
-            'skin_color',
-            'home_world',
-            # 'films',
-            'species',
-            # 'starships',
-            # 'vehicles',
-            'url',
-            # 'created',
-            # 'edited',
+            'sentient_being_type_id',
+            'home_world_id',
+            'name_first',
+            'name_last',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
             )
 
 
@@ -55,19 +40,11 @@ class PlanetSerializer(serializers.HyperlinkedModelSerializer):
         model = Planet
         fields = (
             'name',
-            'diameter',
-            'rotation_period',
-            'orbital_period',
-            # 'gravity',
-            'population',
-            'climate',
-            'terrain',
-            # 'surface_water',
-            # 'residents',
-            # 'films',
-            # 'url',
-            # 'created',
-            # 'edited',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
         )
 
 
@@ -76,31 +53,27 @@ class VehicleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vehicle
         fields = (
-            'name',
-            'vehicle_class',
-            'manufacturer',
-            'length',
-            'cost_in_credits',
-            'crew',
-            'passengers',
-            'max_atmosphering_speed',
-            'cargo_capacity',
-            'consumables'
+            'vehicle_class_id',
+            'model',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
         )
 
 
 class FilmCharacterSerializer(serializers.HyperlinkedModelSerializer):
     # id = serializers.ReadOnlyField(source='film.id')
     film_id = serializers.ReadOnlyField(source='film.film_id')
-    character_id = serializers.ReadOnlyField(source='character.person_id')
+    sentient_being_id = serializers.ReadOnlyField(source='sentient_being.sentient_being_id')
 
     class Meta:
         model = FilmCharacter
 
         fields = {
-            # 'film_person_id',
             'film_id',
-            'character_id',
+            'sentient_being_id',
         }
 
 class FilmPlanetSerializer(serializers.HyperlinkedModelSerializer):
@@ -114,3 +87,30 @@ class FilmPlanetSerializer(serializers.HyperlinkedModelSerializer):
             'film_id',
             'planet_id',
         }
+
+class LanguageSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Language
+        fields = (
+            'name',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
+        )
+
+class SentientBeingTypeSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = SentientBeingType
+        fields = (
+            'name',
+            'language_id',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
+            )
