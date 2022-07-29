@@ -15,11 +15,8 @@ class FilmViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Film.objects.all()
         title = self.request.query_params.get('title', None)
-        episode_id = self.request.query_params.get('episode_id', None)
         if title:
             queryset = queryset.filter(title__contains=title)
-        if episode_id:
-            queryset = queryset.filter(episode_id=episode_id)
 
         return queryset.order_by('film_id')
 
@@ -62,11 +59,8 @@ class VehicleViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Vehicle.objects.all()
-        name = self.request.query_params.get('name', None)
-        manufacturer = self.request.query_params.get('manufacturer', None)
-        if name:
-            queryset = queryset.filter(name__contains=name)
-        if manufacturer:
-            queryset = queryset.filter(manufacturer__contains=manufacturer)
+        model = self.request.query_params.get('model', None)
+        if model:
+            queryset = queryset.filter(model__contains=model)
 
         return queryset.order_by('vehicle_id')

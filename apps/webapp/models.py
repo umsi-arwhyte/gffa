@@ -148,7 +148,7 @@ class Planet(models.Model):
         verbose_name_plural = 'Planets'
 
     def __str__(self):
-        return self.title
+        return self.name
 
     def get_absolute_url(self):
         return reverse('planet_detail', kwargs={'pk': self.pk})
@@ -232,7 +232,7 @@ class Vehicle(models.Model):
         verbose_name_plural = 'Vehicles'
 
     def __str___(self):
-        return self.name
+        return self.model
 
     def get_absolute_url(self):
         return reverse('vehicle_detail', kwargs={'pk': self.pk})

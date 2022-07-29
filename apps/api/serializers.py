@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from apps.webapp.models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle
+from apps.webapp.models import Film, FilmCharacter, FilmPlanet, FilmVehicle, SentientBeing, Planet, Vehicle, VehicleClass, VehicleType
 
 
 class FilmSerializer(serializers.HyperlinkedModelSerializer):
@@ -8,20 +8,13 @@ class FilmSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Film
         fields = (
+            'film_id',
             'title',
-            'episode_id',
-            'opening_crawl',
-            'director',
-            'producer',
-            'release_date',
-            # 'species',
-            # 'starships',
-            # 'vehicles',
-            'characters',
-            'planets',
-            # 'url',
-            # 'created',
-            # 'edited'
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
         )
 
 
@@ -76,16 +69,15 @@ class VehicleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vehicle
         fields = (
-            'name',
+            'vehicle_id',
+            'vehicle_type',
             'vehicle_class',
-            'manufacturer',
-            'length',
-            'cost_in_credits',
-            'crew',
-            'passengers',
-            'max_atmosphering_speed',
-            'cargo_capacity',
-            'consumables'
+            'model',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
         )
 
 
@@ -113,4 +105,41 @@ class FilmPlanetSerializer(serializers.HyperlinkedModelSerializer):
         fields = {
             'film_id',
             'planet_id',
+        }
+
+
+class FilmVehicleSerializer(serializers.HyperlinkedModelSerializer):
+    film_id = serializers.ReadOnlyField(source='film.film_id')
+    vehicle_id = serializers.ReadOnlyField(source='vehicle.vehicle_id')
+
+    class Meta:
+        model = FilmVehicle
+
+        fields = {
+            'film_id',
+            'vehicle_id',
+        }
+
+class VehicleClassSerializer(serializers.HyperlinkedModelSerializer):
+    vehicle_id = serializers.ReadOnlyField(source='vehicle.vehicle_id')
+    vehicle_class_id = serializers.ReadOnlyField(source='vehicle_class.vehicle_class_id')
+
+    class Meta:
+        model = VehicleClass
+
+        fields = {
+            'vehicle_id'
+            'vehicle_class_id'
+        }
+
+class VehicleTypeSerializer(serializers.HyperlinkedModelSerializer):
+    vehicle_id = serializers.ReadOnlyField(source='vehicle.vehicle_id')
+    vehicle_type_id = serializers.ReadOnlyField(source='vehicle_type.vehicle_type_id')
+
+    class Meta:
+        model = VehicleType
+
+        fields = {
+            'vehicle_id'
+            'vehicle_type_id'
         }
