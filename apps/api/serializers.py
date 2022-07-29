@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from apps.webapp.models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle, Language, SentientBeingType
+from apps.webapp.models import Film, FilmCharacter, FilmPlanet, FilmVehicle, SentientBeing, Planet, Vehicle, Language, SentientBeingType, VehicleClass, VehicleType
 
 
 class FilmSerializer(serializers.HyperlinkedModelSerializer):
@@ -8,6 +8,7 @@ class FilmSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Film
         fields = (
+            'film_id',
             'title',
             'description',
             'attributes',
@@ -22,7 +23,8 @@ class SentientBeingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SentientBeing
         fields = (
-            'sentient_being_type_id',
+            'sentient_being_id',
+            'sentient_being_type',
             'home_world',
             'name_first',
             'name_last',
@@ -39,6 +41,7 @@ class PlanetSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Planet
         fields = (
+            'planet_id',
             'name',
             'description',
             'attributes',
@@ -53,7 +56,8 @@ class VehicleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vehicle
         fields = (
-            'vehicle_class_id',
+            'vehicle_id',
+            'vehicle_class',
             'model',
             'description',
             'attributes',
@@ -70,7 +74,6 @@ class FilmCharacterSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = FilmCharacter
-
         fields = {
             'film_id',
             'sentient_being_id',
@@ -82,7 +85,6 @@ class FilmPlanetSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = FilmCharacter
-
         fields = {
             'film_id',
             'planet_id',
@@ -93,6 +95,7 @@ class LanguageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Language
         fields = (
+            'language_id',
             'name',
             'description',
             'attributes',
@@ -106,6 +109,7 @@ class SentientBeingTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SentientBeingType
         fields = (
+            'sentient_being_type_id',
             'name',
             'language_id',
             'description',
@@ -114,3 +118,43 @@ class SentientBeingTypeSerializer(serializers.HyperlinkedModelSerializer):
             'date_created',
             'date_modified'
             )
+
+class FilmVehicleSerializer(serializers.HyperlinkedModelSerializer):
+    film_id = serializers.ReadOnlyField(source='film.film_id')
+    vehicle_id = serializers.ReadOnlyField(source='vehicle.vehicle_id')
+
+    class Meta:
+        model = FilmVehicle
+        fields = {
+            'film_id',
+            'vehicle_id',
+        }
+
+class VehicleClassSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = VehicleClass
+        fields = (
+            'vehicle_class_id',
+            'vehicle_type'
+            'name',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
+        )
+
+class VehicleTypeSerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = VehicleType
+        fields = (
+            'vehicle_type_id'
+            'name',
+            'description',
+            'attributes',
+            'attributes_orig',
+            'date_created',
+            'date_modified'
+        )
