@@ -3,8 +3,8 @@ from rest_framework import viewsets, permissions
 from rest_framework.pagination import PageNumberPagination
 
 from django.contrib.auth.models import User
-from apps.webapp.models import Film, Planet, SentientBeing, Vehicle
-from .serializers import FilmSerializer, PlanetSerializer, SentientBeingSerializer, VehicleSerializer
+from apps.webapp.models import Film, Planet, SentientBeing, Vehicle, Language
+from .serializers import FilmSerializer, PlanetSerializer, SentientBeingSerializer, VehicleSerializer, LanguageSerializer
 
 
 class FilmViewSet(viewsets.ModelViewSet):
@@ -43,13 +43,13 @@ class SentientBeingViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = SentientBeing.objects.all()
         home_world = self.request.query_params.get('home_world', None)
-        name = self.request.query_params.get('name',None)
+        name_first = self.request.query_params.get('name_first',None)
         if home_world:
-            queryset = queryset.filter(home_world__name__iexact=home_world)
-        if name:
-            queryset = queryset.filter(name__contains=name)
+            queryset = queryset.filter(home_world__name_first__iexact=home_world)
+        if name_first:
+            queryset = queryset.filter(name_first__contains=name_first)
 
-        return queryset.order_by('person_id')
+        return queryset.order_by('sentient_being_id')
 
 
 class VehicleViewSet(viewsets.ModelViewSet):
@@ -64,3 +64,16 @@ class VehicleViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(model__contains=model)
 
         return queryset.order_by('vehicle_id')
+
+class LanguageViewSet(viewsets.ModelViewSet):
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Language.objects.all()
+        name = self.request.query_params.get('name', None)
+        if name:
+            queryset = queryset.filter(name__contains=name)
+
+        return queryset.order_by('language_id')
