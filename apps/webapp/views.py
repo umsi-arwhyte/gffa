@@ -4,8 +4,8 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from .forms import FilmForm, PlanetForm, VehicleForm
-from . models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle
+from .forms import FilmForm, PlanetForm, VehicleForm, SentientBeingForm, LanguageForm
+from . models import Film, FilmCharacter, FilmPlanet, SentientBeing, Planet, Vehicle, Language
 
 
 class AboutPageView(generic.TemplateView):
@@ -291,6 +291,56 @@ class PlanetUpdateView(generic.UpdateView):
 class RootPageView(generic.TemplateView):
 	template_name = 'webapp/root.html'
 
+#####work below#########################
+
+@method_decorator(login_required, name='dispatch')
+class SentientBeingCreateView(generic.View):
+	model = SentientBeing
+	form_class = SentientBeingForm
+	success_message = "Sentient Being created successfully!"
+	template_name = 'webapp/sentient_being_new.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def post(self, request):
+		form = SentientBeingForm(request.POST)
+		if form.is_valid():
+			sentient_being = form.save(commit=False)
+			sentient_being.save()
+
+		for sentient_being in form.cleaned_data['sentient_being']:
+			SentientBeing.objects.create(sentient_being=sentient_being)
+
+		return render(request, 'webapp/sentient_being_new.html', {'form': form})
+
+	def get(self, request):
+		form = SentientBeingForm()
+		return render(request, 'webapp/sentient_being_new.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class SentientBeingDeleteView(generic.DeleteView):
+	model = SentientBeing
+	success_message = "Sentient Being deleted successfully!"
+	success_url = reverse_lazy('sentient_being')
+	context_object_name = 'sentient_beings'
+	template_name = 'webapp/sentient_being_delete.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		self.object = self.get_object()
+
+		# Delete Sentien tBeing entries
+		SentientBeing.objects \
+			.filter(sentient_being_id=self.object.sentient_being_id) \
+			.delete()
+
+		self.object.delete()
+
+		return HttpResponseRedirect(self.get_success_url())
 
 class SentientBeingDetailView(generic.DetailView):
 	model = SentientBeing
@@ -314,6 +364,25 @@ class SentientBeingListView(generic.ListView):
 	def get_queryset(self):
 		return SentientBeing.objects.all()
 		# return SentientBeing.objects.select_related('homeworld').order_by('name')
+
+
+@method_decorator(login_required, name='dispatch')
+class SentientBeingUpdateView(generic.UpdateView):
+	model = SentientBeing
+	form_class = SentientBeingForm
+	context_object_name = 'sentient_being'
+	success_message = "Sentient Being updated successfully!"
+	template_name = 'webapp/sentient_being_update.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def form_valid(self, form):
+		sentient_being = form.save(commit=False)
+		sentient_being.save()
+
+		return HttpResponseRedirect(planet.get_absolute_url())
+
 
 
 class SentientBeingPageView(generic.TemplateView):
@@ -409,3 +478,94 @@ class VehicleUpdateView(generic.UpdateView):
 		vehicle.save()
 
 		return HttpResponseRedirect(vehicle.get_absolute_url())
+
+@method_decorator(login_required, name='dispatch')
+class LanguageCreateView(generic.View):
+	model = Language
+	form_class = LanguageForm
+	success_message = "Language created successfully"
+	template_name = 'webapp/language_new.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def post(self, request):
+		form = LanguageForm(request.POST)
+		if form.is_valid():
+			Language = form.save(commit=False)
+			Language.save()
+			if form.cleaned_data['passengers']:
+				for language in form.cleaned_data['languages']:
+					Language.objects.create(vehicle=vehicle, passenger=passenger)
+			return HttpResponseRedirect(vehicle.get_absolute_url())
+
+		return render(request, 'webapp/Language_new.html', {'form': form})
+
+	def get(self, request):
+		form = LanguageForm()
+		return render(request, 'webapp/Language_new.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class LanguageDeleteView(generic.DeleteView):
+	model = Language
+	success_message = "Language deleted successfully"
+	success_url = reverse_lazy('languages')
+	context_object_name = 'languages'
+	template_name = 'webapp/language_delete.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def delete(self, request, *args, **kwargs):
+		self.object = self.get_object()
+
+		# Delete VehiclePassenger entries
+		VehiclePassenger.objects \
+			.filter(languages_id=self.object.languages_id) \
+			.delete()
+
+		self.object.delete()
+
+		return HttpResponseRedirect(self.get_success_url())
+
+
+class LanguageDetailView(generic.DetailView):
+	model = Language
+	context_object_name = 'languages'
+	template_name = 'webapp/language_detail.html'
+
+	def get_object(self):
+		return super().get_object()
+
+
+class LanguageListView(generic.ListView):
+	model = Vehicle
+	context_object_name = 'languages'
+	template_name = 'webapp/languages.html'
+
+	def get_queryset(self):
+		return Language.objects.all()
+
+
+class LanguagePageView(generic.TemplateView):
+	template_name = 'webapp/language_docs.html'
+
+
+@method_decorator(login_required, name='dispatch')
+class LanguageUpdateView(generic.UpdateView):
+	model = Language
+	form_class = LanguageForm
+	context_object_name = 'languages'
+	success_message = "Language updated successfully"
+	template_name = 'webapp/language_update.html'
+
+	def dispatch(self, *args, **kwargs):
+		return super().dispatch(*args, **kwargs)
+
+	def form_valid(self, form):
+		language = form.save(commit=False)
+		language.save()
+
+		return HttpResponseRedirect(language.get_absolute_url())
+

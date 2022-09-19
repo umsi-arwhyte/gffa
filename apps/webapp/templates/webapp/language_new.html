@@ -7,7 +7,7 @@
 	<header>
 		<div class="row">
 			<div class="col-sm-11">
-				<h2>New Vehicle</h2>
+				<h2>New Language</h2>
 			</div>
 			<div class="col-xs-1">
 				<a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">back</a>
@@ -28,34 +28,27 @@
 
 		<div class="row">
 			<div class="col-6">
-				{{ form.model | as_crispy_field }}
-			</div>
-		</div>
-
-        <div class="row">
-			<div class="col-6">
 				{{ form.description | as_crispy_field }}
 			</div>
 		</div>
 
         <div class="row">
-            <div class="col-6">
-                {{ form.attributes | as_crispy_field}}
-            </div>
-        </div>
+			<div class="col-6">
+				{{ form.attributes | as_crispy_field }}
+			</div>
+		</div>
 
-
-
-        <div class="row">
-            <div class="col-3">
+		<div class="row">
+			<div class="col-3">
 				{{ form.date_created | as_crispy_field }}
 			</div>
 			<div class="col-3">
 				{{ form.date_modified | as_crispy_field }}
 			</div>
-        </div>
-type="submit" class="btn btn-outline-success">Add</button>
-		&nbsp;<a class="btn btn-outline-secondary" href="{% url 'vehicles' %}">cancel</a>
+		</div>
+
+	<button type="submit" class="btn btn-outline-success">Add</button>
+		&nbsp;<a class="btn btn-outline-secondary" href="{% url 'language' %}">cancel</a>
 	</form>
 
 <p>&nbsp;</p>

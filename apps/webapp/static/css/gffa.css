@@ -1,10 +1,10 @@
 body {
-    background-color: #272b30;
+    background-color: #00274C;
     color: #c8c8c8;
 }
 
 a {
-    color: #ffffff;
+    color: #FFCB05;
     text-decoration: none;
 }
 
@@ -102,7 +102,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 .navbar a {
     float: left;
     font-size: 16px;
-    color: white;
+    color: #FFCB05;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -125,7 +125,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     font-size: 16px;
     border: none;
     outline: none;
-    color: white;
+    color: #FFCB05;
     padding: 14px 16px;
     background-color: inherit;
     font-family: inherit;
@@ -148,7 +148,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 .dropdown-content a {
     float: none;
-    color: white;
+    color: #FFCB05;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -197,8 +197,4 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 .subscribe_btn {
     margin-left: -100px!;
-}
-
-.yellow {
-    color: #ffe300;
 }
