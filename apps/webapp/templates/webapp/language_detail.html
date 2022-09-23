@@ -8,10 +8,10 @@
             </div>
             {% if user.is_authenticated %}
                 <div class="col-xs-1">
-                    <a class="btn btn-outline-secondary" href="{% url 'planet_update' planets.pk %}">edit</a>
+                    <a class="btn btn-outline-secondary" href="{% url 'language_update' languages.pk %}">edit</a>
                 </div>
                 <div class="col-xs-1">
-                    &nbsp;<a class="btn btn-outline-warning" href="{% url 'planet_delete' planets.pk %}">delete</a>
+                    &nbsp;<a class="btn btn-outline-warning" href="{% url 'language_delete' languagess.pk %}">delete</a>
                 </div>
             {% endif %}
             <div class="col-xs-1">
@@ -22,57 +22,57 @@
 
     <br>
     <article>
-        {% if planets.name %}
+        {% if languages.name %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Planet Name</p>
+                    <p>Language Name</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ planets.name }}</p>
+                    <p>{{ languages.name }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if planets.description %}
+        {% if languages.description %}
             <div class="row">
                 <div class="col-sm-2">
                     <p>Description</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ planets.description }}</p>
+                    <p>{{ languages.description }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if planets.attributes %}
+        {% if languages.attributes %}
             <div class="row">
                 <div class="col-sm-2">
                     <p>Attributes</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ planets.attributes }}</p>
+                    <p>{{ languages.attributes }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if planets.date_created %}
+        {% if languages.date_created %}
             <div class="row">
                 <div class="col-sm-2">
                     <p>Date Created</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ planets.date_created }}</p>
+                    <p>{{ languages.date_created }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if planets.date_modified %}
+        {% if languages.date_modified %}
             <div class="row">
                 <div class="col-sm-2">
                     <p>Date Modified</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ planets.date_modified }}</p>
+                    <p>{{ languages.date_modified }}</p>
                 </div>
             </div>
         {% endif %}

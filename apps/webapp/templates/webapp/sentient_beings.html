@@ -4,21 +4,21 @@
     <article>
 
         <header>
-            <h2>People</h2>
+            <h2>Sentient Being</h2>
         </header>
 
         {% if persons %}
             <div class="row">
                 <div class="col-sm-12">
                     <ul>
-                        {% for person in persons %}
-                            <li><a href="{% url 'person_detail' person.pk %}">{{ person.name }}</a></li>
+                        {% for sentient_being in sentient_beings %}
+                            <li><a href="{% url 'sentient_being' sentient_being.pk %}">{{ sentient_being.name_first }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         {% else %}
-            <p>No People are available to view.</p>
+            <p>No Sentient Beings are available to view.</p>
         {% endif %}
 
     </article>

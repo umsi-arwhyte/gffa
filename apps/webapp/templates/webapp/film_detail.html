@@ -33,57 +33,57 @@
             </div>
         {% endif %}
 
-        {% if film.episode_id %}
+        {% if film.film_id %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Episode ID</p>
+                    <p>Film ID</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ film.episode_id }}</p>
+                    <p>{{ film.film_id }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if film.opening_crawl %}
+        {% if film.description %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Opening Crawl</p>
+                    <p>Description</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ film.opening_crawl }}</p>
+                    <p>{{ film.description }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if film.director %}
+        {% if film.attributes %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Director</p>
+                    <p>Attributes</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ film.director }}</p>
+                    <p>{{ film.attributes }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if film.producer %}
+        {% if film.date_created %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Producer</p>
+                    <p>Date Created</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ film.producer }}</p>
+                    <p>{{ film.date_created }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if film.release_date %}
+        {% if film.date_modified %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Release Date</p>
+                    <p>Date Modified</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ film.release_date }}</p>
+                    <p>{{ film.date_modified }}</p>
                 </div>
             </div>
         {% endif %}
@@ -91,11 +91,11 @@
         {% if film.characters %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Characters</p>
+                    <p>Sentient Being</p>
                 </div>
                 <div class="col-sm-10">
-                    {% for character in film.characters.all %}
-                        <li>{{ character.name }}</li>
+                    {% for sentient_being in film.characters.all %}
+                        <li>{{ sentient_being.name }}</li>
                     {% endfor %}
                 </div>
             </div>

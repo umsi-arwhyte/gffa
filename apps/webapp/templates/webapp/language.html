@@ -1,0 +1,35 @@
+{% extends 'webapp/base.html' %}
+{% block mainbody %}
+
+    <article>
+
+        <header>
+            <div class="row">
+                <div class="col-sm-9">
+                    <h2>Languages</h2>
+                </div>
+                <div class="col-sm-1">
+                    {% if user.is_authenticated %}
+                    <a class="btn btn-outline-secondary" href="{% url 'language_new' %}">new</a>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        {% if languages %}
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul>
+                        {% for language in languages %}
+                            <li><a href="{% url 'language_detail' language.pk %}">{{ language.name }}</a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <p>No Languages are available to view.</p>
+        {% endif %}
+
+    </article>
+
+{% endblock mainbody %}

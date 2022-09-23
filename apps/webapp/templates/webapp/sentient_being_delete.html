@@ -1,0 +1,13 @@
+{% extends 'webapp/base.html' %}
+
+{% block mainbody %}
+
+	<form method="post">
+	{% csrf_token %}
+		<p>Are you sure you want to delete the sentient being "{{ sentient_being.name_first }}"?</p>
+		<button type="submit" class="btn btn-outline-danger">delete</button>
+		<a class="btn btn-outline-secondary" href="{% url 'sentient_being_detail' sentient_being.pk %}">cancel</a>
+	</form>
+	<p>&nbsp;</p>
+
+{% endblock mainbody %}

@@ -44,104 +44,50 @@
             </div>
         {% endif %}
 
-        {% if vehicles.manufacturer %}
+        {% if vehicles.description %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Manufacturer</p>
+                    <p>Description</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ vehicles.manufacturer }}</p>
+                    <p>{{ vehicles.description }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if vehicles.cost_in_credits %}
+        {% if vehicles.attributes %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Cost in Credits</p>
+                    <p>attributes</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ vehicles.cost_in_credits }}</p>
+                    <p>{{ vehicles.attributes }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if vehicles.length %}
+        {% if vehicles.date_created %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Length</p>
+                    <p>Date Created</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ vehicles.length }}</p>
+                    <p>{{ vehicles.date_created }}</p>
                 </div>
             </div>
         {% endif %}
 
-        {% if vehicles.max_atmosphering_speed %}
+        {% if vehicles.date_modified %}
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Max Atmosphering Speed</p>
+                    <p>Date Modified</p>
                 </div>
                 <div class="col-sm-10">
-                    <p>{{ vehicles.max_atmosphering_speed }} cm</p>
+                    <p>{{ vehicles.date_modified }} </p>
                 </div>
             </div>
         {% endif %}
 
-        {% if vehicles.crew %}
-            <div class="row">
-                <div class="col-sm-2">
-                    <p>Crew</p>
-                </div>
-                <div class="col-sm-10">
-                    <p>{{ vehicles.crew }} kgs</p>
-                </div>
-            </div>
-        {% endif %}
-
-        {% if vehicles.passengers %}
-            <div class="row">
-                <div class="col-sm-2">
-                    <p>Passengers</p>
-                </div>
-                <div class="col-sm-10">
-                    <p>{{ vehicles.passengers }}</p>
-                </div>
-            </div>
-        {% endif %}
-
-        {% if vehicles.cargo_capacity %}
-            <div class="row">
-                <div class="col-sm-2">
-                    <p>Cargo Capacity</p>
-                </div>
-                <div class="col-sm-10">
-                    <p>{{ vehicles.cargo_capacity }}</p>
-                </div>
-            </div>
-        {% endif %}
-
-        {% if vehicles.consumables %}
-            <div class="row">
-                <div class="col-sm-2">
-                    <p>consumables</p>
-                </div>
-                <div class="col-sm-10">
-                    <p>{{ vehicles.consumables }}</p>
-                </div>
-            </div>
-        {% endif %}
-
-        {% if vehicles.vehicle_class %}
-            <div class="row">
-                <div class="col-sm-2">
-                    <p>Vehicle Class</p>
-                </div>
-                <div class="col-sm-10">
-                    <p>{{ vehicles.vehicle_class }}</p>
-                </div>
-            </div>
-        {% endif %}
     </article>
     <br>
 

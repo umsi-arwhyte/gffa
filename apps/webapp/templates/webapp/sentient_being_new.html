@@ -1,0 +1,73 @@
+{% extends 'webapp/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block mainbody %}
+
+	<header>
+		<div class="row">
+			<div class="col-sm-11">
+				<h2>New Sentient Being</h2>
+			</div>
+			<div class="col-xs-1">
+				<a class="btn btn-outline-secondary" href="{{request.META.HTTP_REFERER}}">back</a>
+			</div>
+		</div>
+	</header>
+
+	<p>&nbsp;</p>
+	<!-- novalidate attribute required to render validation messages -->
+	<form method="post" novalidate>
+	{% csrf_token %}
+    <div class="row">
+        <div class="col-6">
+            {{ form.name_first | as_crispy_field }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form.name_last | as_crispy_field }}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-6">
+            {{ form.home_world | as_crispy_field }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form.sentient_being_type | as_crispy_field }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form.description | as_crispy_field }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            {{ form.attributes | as_crispy_field}}
+        </div>
+    </div>
+
+
+        <div class="row">
+            <div class="col-3">
+				{{ form.date_created | as_crispy_field }}
+			</div>
+			<div class="col-3">
+				{{ form.date_modified | as_crispy_field }}
+			</div>
+        </div>
+type="submit" class="btn btn-outline-success">Add</button>
+		&nbsp;<a class="btn btn-outline-secondary" href="{% url 'sentient_being' %}">cancel</a>
+	</form>
+
+<p>&nbsp;</p>
+
+{% endblock mainbody %}

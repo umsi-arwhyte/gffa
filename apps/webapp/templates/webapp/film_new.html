@@ -28,31 +28,31 @@
 
 		<div class="row">
 			<div class="col-6">
-				{{ form.opening_crawl | as_crispy_field }}
+				{{ form.description | as_crispy_field }}
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-3">
-				{{ form.director | as_crispy_field }}
+				{{ form.attributes | as_crispy_field }}
 			</div>
 			<div class="col-3">
-				{{ form.producer | as_crispy_field }}
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-3">
-				{{ form.episode_id | as_crispy_field }}
-			</div>
-			<div class="col-3">
-				{{ form.release_date | as_crispy_field }}
+				{{ form.created_date | as_crispy_field }}
 			</div>
 		</div>
 
 		<div class="row">
 			<div class="col-3">
-				{{ form.characters | as_crispy_field }}
+				{{ form.film_id | as_crispy_field }}
+			</div>
+			<div class="col-3">
+				{{ form.modified_date | as_crispy_field }}
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-3">
+				{{ form.sentient_beings | as_crispy_field }}
 			</div>
 			<div class="col-3">
 				{{ form.planets | as_crispy_field }}
