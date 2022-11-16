@@ -1,6 +1,6 @@
 {% extends 'webapp/base.html' %}
 {% block mainbody %}
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-lg-3">
         </div>
         <div class="col-lg-6 center">
@@ -12,20 +12,39 @@
         <div class="col-lg-3">
         </div>
 
-    </div>
+    </div> -->
+    
     <div class="row">
         <hr>
         <div class="col-sm-2 col-lg-2 col-md-2">
         </div>
         <div class="col-lg-8 col-md-8 col-sm-8">
             <h1 class="center">
-                Try it now!
+                The Starwars API
             </h1>
-            <div class="input-group">
+            <!-- <div class="input-group">
                 <span class="input-group-addon">https://swapi.py4e.com/api/</span>
                 <input id="interactive" type="text" class="form-control" placeholder="persons/1/">
                 <span class="input-group-btn"><button onClick="interactive_call();return false;"
                                                       class="btn btn-primary">request</button></span>
+            </div> -->
+        <div class="form"
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span hidden="">Resource URL:</span>
+                    <span class="input-group-text" id="">https://swapi.py4e.com/api/</span>
+                    <input 
+                    id="interactive" 
+                    type="text" 
+                    class="form-control" 
+                    placeholder="persons/1/" 
+                    aria-label="" 
+                    aria-describedby="basic-addon2"
+                    />
+                     <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="button">Request</button>
+                </div>
+            </div>
             </div>
             <small>Need a hint? try <a href="#" onClick="update('persons/1/');return false;"><i>persons/1/</i></a>
                 or <a href="#" onClick="update('planets/3/');return false;"><i>planets/3/</i></a> or
@@ -72,7 +91,7 @@
         <div class="col-sm-2 col-lg-2 col-md-2">
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-sm-2 col-lg-2 col-md-2">
         </div>
         <div class="col-sm-3 col-lg-3 col-md-3">
@@ -94,7 +113,7 @@
                 consume swapi in your favourite programming language, in a style that suits you.</p>
         </div>
         <div class="col-sm-2 col-lg-2 col-md-2">
-        </div>
+        </div> -->
     </div>
     <hr>
 {% endblock mainbody %}

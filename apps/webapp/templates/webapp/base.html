@@ -20,6 +20,9 @@
 </head>
 
 <body>
+    <div class="bg-image" id="bg-image">
+    </div>
+
 <nav class="navbar navbar-expand-md">
     <!--
     <div class="navbar-header">
@@ -37,16 +40,16 @@
     </div>
     -->
 
-    <a class="navbar-brand" href="/" style="padding: 0px 0px;">
-    <img src="{% static 'img/GFFA_maize_blue.png' %}" alt="GFFA" style="width:60px;height:60px"></a> <!--TODO: add logo -->
+    <a class="navbar-brand mx-auto" href="/">GFFA</a> 
+    <!-- <img src="{% static 'img/GFFA_maize_blue.png' %}" alt="GFFA" style="width:60px;height:60px"></a> TODO: add logo -->
     <button class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse order-3" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
             <a class="nav-link" href="{% url 'about' %}">About</a>
             <div class="dropdown">
                 <button class="dropbtn">API
@@ -61,7 +64,7 @@
                     <a class="nav-link" href="{% url 'vehicle_docs' %}">Vehicles</a>
                 </div>
             </div>
-            <div class="dropdown">
+            <div class="dropdown" id="navbarDropdown">
                 <button class="dropbtn">Entities
                     <i class="fa fa-caret-down"></i>
                 </button>
@@ -80,23 +83,24 @@
         {{ user.username }}
         <a class="nav-link" href="{% url 'logout' %}">Log out</a>
     {% else %}
-        <a class="navbar-right" href="{% url 'login' %}">Log in</a>
+        <a class="navbar-right order-3" href="{% url 'login' %}">Login</a>
     {% endif %}
 </nav>
+
 
 <main>
     <div class="container-fluid" style="margin-top: 60px;">
 
         <!-- Removed jumbotron row -->
 
-        <div class="jumbotron jumbotron-fluid" style="background-image: url(https://www.ctvnews.ca/polopoly_fs/1.4892355.1586635325!/httpImage/image.jpg_gen/derivatives/landscape_1020/image.jpg); background-size: cover;">
+        <!-- <div class="jumbotron jumbotron-fluid" style="background-image: url(https://www.ctvnews.ca/polopoly_fs/1.4892355.1586635325!/httpImage/image.jpg_gen/derivatives/landscape_1020/image.jpg); background-size: cover;">
             <div class="container-fluid">
                 <div class="center yellow">
                     <h1 class="display-4">A Galaxy Far, Far Away</h1>
                     <p class="lead">A Star Wars API</p>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!--
         <div class="row center yellow">
@@ -133,7 +137,7 @@
 </main>
 
 <footer>
-    <div class="container-fluid">
+    <div class="footer">
         <div class="row">
             <div class="col-sm">
                 &copy;
